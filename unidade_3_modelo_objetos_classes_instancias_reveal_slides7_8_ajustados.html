@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Unidade 3 — Modelo de Objetos, Classes e Instâncias</title>
+<link href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/theme/white.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/highlight/monokai.css" rel="stylesheet"/>
+<style>
+    :root {
+      --blue-900: #1f3f5b;
+      --blue-700: #356985;
+      --blue-500: #7aa6c2;
+      --blue-200: #d9ebf4;
+      --blue-100: #edf6fb;
+      --gray-900: #2f3437;
+      --gray-700: #58636b;
+      --gray-500: #8c979e;
+      --gray-200: #e8ecef;
+      --white: #ffffff;
+      --mint: #dbeee8;
+      --sand: #f4efe4;
+      --lav: #e9e7f5;
+      --danger: #be5a5a;
+      --ok: #507e63;
+    }
+
+    .reveal {
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--gray-900);
+      background: radial-gradient(circle at top left, rgba(217,235,244,.70), transparent 38%), linear-gradient(135deg, #ffffff 0%, #f6f9fb 65%, #eef5f9 100%);
+    }
+
+    .reveal .slides { text-align: left; }
+    .reveal section { padding: 28px 34px; box-sizing: border-box; }
+
+    .reveal h1, .reveal h2, .reveal h3 {
+      color: var(--blue-900);
+      letter-spacing: -0.035em;
+      line-height: 1.04;
+      text-transform: none;
+      font-weight: 780;
+    }
+    .reveal h1 { font-size: 2.65em; }
+    .reveal h2 { font-size: 1.72em; margin-bottom: .35em; }
+    .reveal h3 { font-size: 1.12em; color: var(--blue-700); margin-bottom: .25em; }
+    .reveal p, .reveal li { font-size: .72em; line-height: 1.42; color: var(--gray-700); }
+    .reveal ul { margin-left: 1.1em; }
+    .reveal strong { color: var(--blue-900); font-weight: 750; }
+    .reveal code { color: #23485e; background: rgba(217,235,244,.65); padding: .08em .24em; border-radius: .25em; }
+    .reveal pre { width: 100%; margin: .35em 0; box-shadow: none; border-radius: 18px; overflow: hidden; font-size: .56em; }
+    .reveal pre code { max-height: 520px; padding: 20px 22px; border-radius: 18px; background: #1d2730; color: #edf5f9; }
+    .reveal small { color: var(--gray-500); font-size: .42em; }
+
+    .eyebrow {
+      display: inline-block;
+      font-size: .35em;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--blue-700);
+      background: var(--blue-100);
+      padding: .42em .7em;
+      border-radius: 999px;
+      margin-bottom: 18px;
+      font-weight: 750;
+    }
+    .subtitle { font-size: .78em !important; color: var(--gray-700) !important; max-width: 880px; }
+    .quote {
+      font-size: 1.05em !important;
+      line-height: 1.25 !important;
+      color: var(--blue-900) !important;
+      border-left: 6px solid var(--blue-500);
+      padding-left: 26px;
+      margin-top: 24px;
+      max-width: 980px;
+    }
+    .source {
+      display: block;
+      margin-top: 12px;
+      color: var(--gray-500) !important;
+      font-size: .34em !important;
+    }
+    .source a { color: var(--blue-700); }
+    .muted { color: var(--gray-500) !important; }
+    .big { font-size: 1.05em !important; color: var(--blue-900) !important; }
+    .center { text-align: center; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: stretch; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .card {
+      background: rgba(255,255,255,.86);
+      border: 1px solid rgba(122,166,194,.28);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 16px 50px rgba(31,63,91,.08);
+    }
+    .card.compact { padding: 18px; }
+    .card h3 { margin-top: 0; }
+    .pill {
+      display: inline-block;
+      background: var(--blue-100);
+      border: 1px solid var(--blue-200);
+      color: var(--blue-900);
+      font-size: .42em;
+      border-radius: 999px;
+      padding: .35em .65em;
+      margin: .12em;
+      font-weight: 650;
+    }
+    .mono-label { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: var(--blue-700); }
+    .diagram {
+      position: relative;
+      min-height: 410px;
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(217,235,244,.58), rgba(255,255,255,.72));
+      border: 1px solid rgba(122,166,194,.30);
+      overflow: hidden;
+    }
+    .diagram::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border-radius: 22px;
+      border: 1px dashed rgba(53,105,133,.22);
+    }
+    .node {
+      position: absolute;
+      border-radius: 20px;
+      background: #fff;
+      border: 1px solid rgba(53,105,133,.24);
+      box-shadow: 0 18px 40px rgba(31,63,91,.10);
+      padding: 16px 18px;
+      color: var(--blue-900);
+      font-weight: 750;
+      font-size: .55em;
+      text-align: center;
+    }
+    .node small { display: block; margin-top: 6px; font-weight: 520; color: var(--gray-500); font-size: .7em; }
+    .arrow {
+      position: absolute;
+      height: 2px;
+      background: rgba(53,105,133,.42);
+      transform-origin: left center;
+    }
+    .arrow::after {
+      content: "";
+      position: absolute;
+      right: -1px; top: -5px;
+      border-left: 9px solid rgba(53,105,133,.42);
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+    }
+    .class-box {
+      width: 420px;
+      border-radius: 20px;
+      border: 1.5px solid rgba(31,63,91,.30);
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 18px 44px rgba(31,63,91,.09);
+    }
+    .class-box .head { background: var(--blue-200); color: var(--blue-900); padding: 16px 20px; text-align: center; font-weight: 800; font-size: .75em; }
+    .class-box .part { padding: 16px 22px; border-top: 1px solid var(--gray-200); font-size: .58em; color: var(--gray-700); }
+    .object-card {
+      border-radius: 24px;
+      background: #fff;
+      border: 1px solid rgba(122,166,194,.32);
+      padding: 18px 22px;
+      width: 275px;
+      box-shadow: 0 14px 35px rgba(31,63,91,.09);
+    }
+    .object-card .obj-title { font-weight: 800; color: var(--blue-900); font-size: .62em; margin-bottom: 10px; }
+    .object-card p { margin: 4px 0; font-size: .52em; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: var(--gray-700); }
+    .timeline {
+      position: relative;
+      padding: 25px 0 0 0;
+    }
+    .timeline::before { content: ""; position: absolute; top: 68px; left: 0; right: 0; height: 3px; background: var(--blue-200); }
+    .time-item { position: relative; padding-top: 68px; }
+    .time-dot { position: absolute; top: 53px; left: 18px; width: 34px; height: 34px; border-radius: 50%; background: var(--blue-500); box-shadow: 0 0 0 10px rgba(122,166,194,.18); }
+    .time-year { color: var(--blue-900); font-weight: 850; font-size: .8em; margin-bottom: 8px; }
+    .comparison { width: 100%; border-collapse: collapse; overflow: hidden; border-radius: 18px; font-size: .48em; }
+    .comparison th { background: var(--blue-200); color: var(--blue-900); text-align: left; padding: 14px 16px; }
+    .comparison td { background: rgba(255,255,255,.9); border-top: 1px solid var(--gray-200); padding: 12px 16px; color: var(--gray-700); vertical-align: top; }
+    .callout {
+      background: var(--sand);
+      border-left: 6px solid #d1bd89;
+      padding: 18px 22px;
+      border-radius: 18px;
+      color: var(--gray-700);
+      margin-top: 18px;
+    }
+    .callout.blue { background: var(--blue-100); border-left-color: var(--blue-500); }
+    .callout.mint { background: var(--mint); border-left-color: var(--ok); }
+    .callout.warn { background: #f8eceb; border-left-color: var(--danger); }
+    .callout p { margin: 0; }
+    .question { font-size: 1.18em !important; color: var(--blue-900) !important; line-height: 1.20 !important; }
+    .exercise-step {
+      display: flex; align-items: flex-start; gap: 18px; margin: 12px 0;
+    }
+    .badge {
+      min-width: 42px; height: 42px; border-radius: 50%; background: var(--blue-500); color: white; display: inline-flex; align-items: center; justify-content: center; font-weight: 800; font-size: .55em;
+    }
+    .slide-footer {
+      position: absolute;
+      left: 42px; bottom: 18px;
+      font-size: .28em;
+      color: var(--gray-500);
+      letter-spacing: .03em;
+    }
+    .progress-table td:first-child { font-weight: 750; color: var(--blue-900); white-space: nowrap; }
+    .two-code { display:grid; grid-template-columns: 1fr 1fr; gap: 22px; align-items:start; }
+    .code-caption { font-size: .42em !important; margin: 0 0 6px 2px !important; color: var(--blue-700) !important; font-weight: 750; }
+    .reveal .controls, .reveal .progress { color: var(--blue-700); }
+    .hl { background: linear-gradient(transparent 55%, rgba(122,166,194,.25) 55%); color: var(--blue-900); font-weight: 760; }
+    .fragment.blur { filter: blur(4px); opacity: .2; }
+    .fragment.blur.visible { filter: blur(0); opacity: 1; }
+    .fragment.fade-up { transform: translateY(18px); }
+    .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: #fff; border:1px solid var(--gray-200); border-bottom-width:3px; padding:.08em .38em; border-radius:8px; color:var(--blue-900); }
+
+    /* Ajuste para slides com trechos de código maiores: evita corte vertical em 16:9 */
+    .reveal section.code-slide { padding: 22px 34px; }
+    .reveal section.code-slide .eyebrow { margin-bottom: 10px; }
+    .reveal section.code-slide h2 { font-size: 1.42em; margin-bottom: .22em; line-height: 1.02; }
+    .reveal section.code-slide pre { font-size: .44em; margin: .20em 0; border-radius: 16px; }
+    .reveal section.code-slide pre code { max-height: 430px; padding: 14px 18px; line-height: 1.18; overflow: auto; }
+    .reveal section.code-slide p { font-size: .58em; line-height: 1.28; margin-top: .45em; }
+    .reveal section.code-slide .callout { margin-top: 10px; padding: 12px 16px; border-radius: 16px; }
+    .reveal section.code-slide .callout p { font-size: .56em; }
+
+
+
+    /* Ajuste específico dos slides 7 e 8: código completo + mensagem final visíveis em 16:9 */
+    #slide-antes-procedural,
+    #slide-depois-objeto { padding: 16px 34px 14px; }
+    #slide-antes-procedural .eyebrow,
+    #slide-depois-objeto .eyebrow { font-size: .31em; margin-bottom: 8px; padding: .34em .65em; }
+    #slide-antes-procedural h2,
+    #slide-depois-objeto h2 { font-size: 1.26em; line-height: 1.01; margin-bottom: .16em; }
+    #slide-antes-procedural pre,
+    #slide-depois-objeto pre { font-size: .39em; margin: .12em 0; border-radius: 14px; }
+    #slide-antes-procedural pre code,
+    #slide-depois-objeto pre code { max-height: none; overflow: visible; padding: 10px 14px; line-height: 1.10; border-radius: 14px; }
+    #slide-antes-procedural .callout { margin-top: 8px; padding: 10px 14px; border-radius: 14px; }
+    #slide-antes-procedural .callout p { font-size: .50em; line-height: 1.22; }
+    #slide-depois-objeto > p.fragment { font-size: .50em !important; line-height: 1.20; margin-top: .24em; }
+
+    /* Ajuste específico do slide 4: mantém o diagrama completo dentro da tela do reveal.js */
+    #modelo-pensar-slide { padding-top: 20px; }
+    #modelo-pensar-slide h2 { font-size: 1.48em; margin-bottom: .22em; }
+    #modelo-pensar-slide .big { font-size: .84em !important; line-height: 1.30 !important; margin: .15em 0 .55em; }
+    #modelo-pensar-slide .thinking-diagram { min-height: 340px; overflow: visible; margin-top: 6px; }
+    #modelo-pensar-slide .thinking-diagram .node { font-size: .50em; padding: 14px 16px; min-width: 102px; }
+    .home-link{
+      position:fixed;
+      top:16px;
+      left:16px;
+      z-index:40;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      min-height:40px;
+      padding:9px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.9);
+      border:1px solid rgba(122,166,194,.32);
+      color:var(--blue-900);
+      font:700 14px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      text-decoration:none;
+      box-shadow:0 10px 26px rgba(31,63,91,.12);
+      backdrop-filter:blur(8px);
+    }
+    .home-link:hover{background:#fff;transform:translateY(-1px);}
+    @media print { .reveal .slides section { page-break-after: always; } }
+  </style>
+</head>
+<body>
+<a class="home-link" href="index.html" aria-label="Voltar ao menu inicial">← Menu</a>
+<div class="reveal">
+<div class="slides">
+<section data-transition="fade">
+<span class="eyebrow">Programação Orientada a Objetos • PHP 8.4</span>
+<h1>Unidade 3<br/>Modelo de objetos, classes e instâncias</h1>
+<p class="subtitle">Da função que manipula dados para objetos que concentram <strong>estado</strong>, <strong>comportamento</strong> e <strong>responsabilidade</strong>.</p>
+<p class="quote">“Um objeto não é uma variável enfeitada: é uma pequena unidade de decisão dentro do sistema.”</p>
+<aside class="notes">Abrir com a mudança de mentalidade: menos “onde coloco essa função?” e mais “quem é responsável por essa regra?”</aside>
+<div class="slide-footer">Unidade 3 — Modelo de Objetos, Classes e Instâncias</div>
+</section>
+<section data-transition="fade">
+<span class="eyebrow">Questão orientadora</span>
+<h2>Como representar conceitos do mundo real sem transformar o código em um amontoado de variáveis?</h2>
+<div class="grid-3" style="margin-top:40px">
+<div class="card fragment fade-up"><h3>Dados</h3><p>O que o objeto sabe sobre si: nome, preço, estoque, status.</p></div>
+<div class="card fragment fade-up"><h3>Operações</h3><p>O que o objeto sabe fazer: aplicar desconto, reservar, cancelar.</p></div>
+<div class="card fragment fade-up"><h3>Regras</h3><p>O que não pode ser quebrado: preço positivo, estoque suficiente, CPF válido.</p></div>
+</div>
+</section>
+<section>
+<span class="eyebrow">Roteiro da aula</span>
+<h2>O que precisa “clicar” hoje?</h2>
+<div class="grid-2">
+<div class="card">
+<h3>Modelo conceitual</h3>
+<ul>
+<li class="fragment">classe, objeto e instância;</li>
+<li class="fragment">identidade, estado e comportamento;</li>
+<li class="fragment">responsabilidade e colaboração entre objetos;</li>
+<li class="fragment">diferença entre modelar dados e modelar comportamento.</li>
+</ul>
+</div>
+<div class="card">
+<h3>Implementação em PHP 8.4</h3>
+<ul>
+<li class="fragment">propriedades, métodos e <code>$this</code>;</li>
+<li class="fragment"><code>new</code>, construtores e promoção de propriedades;</li>
+<li class="fragment">encapsulamento, invariantes e property hooks;</li>
+<li class="fragment">namespaces, Composer e autoload PSR-4.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="modelo-pensar-slide">
+<span class="eyebrow">A virada de chave</span>
+<h2>Programar não é só escrever instruções: é escolher um modelo para pensar o problema</h2>
+<p class="big">Em POO, o sistema é visto como uma rede de objetos que possuem identidade, mantêm estado e trocam mensagens por meio de métodos.</p>
+<div class="diagram thinking-diagram fragment fade-up">
+<div class="node" style="left:64px;top:116px">Cliente<small>pede algo</small></div>
+<div class="arrow" style="left:225px;top:164px;width:178px;transform:rotate(0deg)"></div>
+<div class="node" style="left:415px;top:68px">Carrinho<small>organiza itens</small></div>
+<div class="arrow" style="left:565px;top:148px;width:155px;transform:rotate(21deg)"></div>
+<div class="node" style="left:720px;top:136px">Produto<small>preço e regra</small></div>
+<div class="arrow" style="left:550px;top:214px;width:150px;transform:rotate(145deg)"></div>
+<div class="node" style="left:385px;top:238px">Pedido<small>confirma compra</small></div>
+</div>
+</section>
+<section>
+<span class="eyebrow">História</span>
+<h2>POO nasceu de uma necessidade de simular sistemas complexos</h2>
+<div class="grid-3 timeline">
+<div class="time-item fragment fade-up"><div class="time-dot"></div><div class="time-year">1960s</div><p>Dahl e Nygaard desenvolvem Simula no Norwegian Computing Center para descrever sistemas de eventos discretos.</p></div>
+<div class="time-item fragment fade-up"><div class="time-dot"></div><div class="time-year">Simula 67</div><p>Introduz conceitos como objetos, classes, herança, subclasses e procedimentos virtuais.</p></div>
+<div class="time-item fragment fade-up"><div class="time-dot"></div><div class="time-year">2001</div><p>Os criadores recebem o ACM Turing Award por ideias fundamentais para a emergência da programação orientada a objetos.</p></div>
+</div>
+<small class="source">Fontes: ACM Turing Award; IEEE Milestones; PHP Manual. Ver referências ao final.</small>
+</section>
+<section>
+<span class="eyebrow">Por que isso importa?</span>
+<h2>A origem explica a ideia central</h2>
+<p class="question">Objetos surgiram para representar entidades que existem, mudam e interagem ao longo do tempo.</p>
+<div class="grid-2" style="margin-top:35px">
+<div class="card fragment">
+<h3>Sem objeto</h3>
+<p>Você espalha listas, índices, parâmetros e funções por todo o programa.</p>
+</div>
+<div class="card fragment">
+<h3>Com objeto</h3>
+<p>Você cria unidades com nome, regra e responsabilidade: <code>Produto</code>, <code>Carrinho</code>, <code>Pedido</code>.</p>
+</div>
+</div>
+<div class="callout blue fragment"><p><strong>Analogia:</strong> um objeto é como uma peça de LEGO com encaixes definidos. Você não precisa saber como ela foi fabricada para usá-la corretamente.</p></div>
+</section>
+<section class="code-slide compact-code-fit" id="slide-antes-procedural">
+<span class="eyebrow">Antes: código procedural</span>
+<h2>Quando dados e operações vivem separados</h2>
+<pre><code class="language-php" data-line-numbers="">&lt;?php
+$produto = [
+    'nome' =&gt; 'Teclado Mecânico',
+    'preco' =&gt; 250.00,
+    'estoque' =&gt; 10,
+];
+
+function aplicarDesconto(array $produto, float $percentual): array
+{
+    $produto['preco'] -= $produto['preco'] * ($percentual / 100);
+    return $produto;
+}
+
+$produto = aplicarDesconto($produto, 10);</code></pre>
+<div class="callout warn fragment"><p>Funciona, mas a regra de desconto está fora do conceito <strong>Produto</strong>. Conforme o sistema cresce, regras ficam espalhadas.</p></div>
+</section>
+<section class="code-slide compact-code-fit" id="slide-depois-objeto">
+<span class="eyebrow">Depois: objeto</span>
+<h2>Dados e comportamento passam a fazer parte da mesma ideia</h2>
+<pre><code class="language-php" data-line-numbers="">&lt;?php
+class Produto
+{
+    public string $nome;
+    public float $preco;
+    public int $estoque;
+
+    public function aplicarDesconto(float $percentual): void
+    {
+        $this-&gt;preco -= $this-&gt;preco * ($percentual / 100);
+    }
+}
+
+$produto = new Produto();
+$produto-&gt;nome = 'Teclado Mecânico';
+$produto-&gt;preco = 250.00;
+$produto-&gt;estoque = 10;
+
+$produto-&gt;aplicarDesconto(10);</code></pre>
+<p class="fragment"><strong>Atenção:</strong> esse ainda é um primeiro passo. Depois vamos proteger melhor as regras com encapsulamento.</p>
+</section>
+<section>
+<span class="eyebrow">Vocabulário essencial</span>
+<h2>Classe, objeto e instância não são sinônimos perfeitos</h2>
+<table class="comparison">
+<thead><tr><th>Termo</th><th>Ideia</th><th>Exemplo</th></tr></thead>
+<tbody>
+<tr class="fragment"><td>Classe</td><td>Definição do tipo: propriedades, métodos, constantes e regras.</td><td><code>class Produto { ... }</code></td></tr>
+<tr class="fragment"><td>Objeto</td><td>Entidade em memória, com identidade própria e estado atual.</td><td>o produto “Teclado Mecânico” criado em execução.</td></tr>
+<tr class="fragment"><td>Instância</td><td>Um objeto específico criado a partir de uma classe.</td><td><code>$teclado = new Produto();</code></td></tr>
+</tbody>
+</table>
+<div class="callout blue fragment"><p><strong>Frase de impacto:</strong> classe é a receita; objeto é o bolo assado. A receita não alimenta ninguém — o objeto é o que existe durante a execução.</p></div>
+</section>
+<section>
+<span class="eyebrow">Classe como molde</span>
+<h2>Uma classe descreve o que todos os objetos daquele tipo têm em comum</h2>
+<div class="grid-2" style="align-items:center">
+<div class="class-box fragment fade-up">
+<div class="head">Produto</div>
+<div class="part"><strong>Propriedades</strong><br/>nome: string<br/>preco: float<br/>estoque: int</div>
+<div class="part"><strong>Métodos</strong><br/>aplicarDesconto()<br/>reservarEstoque()<br/>estaDisponivel()</div>
+</div>
+<div class="fragment fade-up">
+<p class="big">O molde não define o valor de cada produto. Ele define a <span class="hl">estrutura possível</span> e as <span class="hl">operações válidas</span>.</p>
+<p>Por isso, uma boa classe comunica intenção: ao ler <code>Produto</code>, você entende o papel daquele conceito no domínio.</p>
+</div>
+</div>
+</section>
+<section>
+<span class="eyebrow">Objeto como instância</span>
+<h2>Várias instâncias podem nascer do mesmo molde</h2>
+<div class="grid-3">
+<div class="object-card fragment fade-up"><div class="obj-title">$teclado</div><p>nome = Teclado</p><p>preco = 250.00</p><p>estoque = 10</p></div>
+<div class="object-card fragment fade-up"><div class="obj-title">$mouse</div><p>nome = Mouse</p><p>preco = 90.00</p><p>estoque = 35</p></div>
+<div class="object-card fragment fade-up"><div class="obj-title">$monitor</div><p>nome = Monitor</p><p>preco = 899.00</p><p>estoque = 4</p></div>
+</div>
+<p class="fragment big" style="margin-top:40px">Mesmo tipo. Estados diferentes. Identidades diferentes.</p>
+</section>
+<section>
+<span class="eyebrow">Tripé do objeto</span>
+<h2>Identidade, estado e comportamento</h2>
+<div class="grid-3">
+<div class="card fragment fade-up">
+<h3>Identidade</h3>
+<p>O objeto continua sendo “ele mesmo” mesmo se seu estado mudar.</p>
+</div>
+<div class="card fragment fade-up">
+<h3>Estado</h3>
+<p>Valores atuais de suas propriedades: preço, estoque, status.</p>
+</div>
+<div class="card fragment fade-up">
+<h3>Comportamento</h3>
+<p>Métodos que alteram ou consultam o estado obedecendo regras.</p>
+</div>
+</div>
+<div class="callout mint fragment"><p>Um objeto saudável não é apenas “um saco de dados”. Ele protege o próprio estado por meio de comportamento consistente.</p></div>
+</section>
+<section>
+<span class="eyebrow">PHP 8.4</span>
+<h2>O básico oficial de classes e objetos</h2>
+<p>O manual do PHP organiza a orientação a objetos em tópicos como basics, propriedades, métodos, construtores, visibilidade, herança, interfaces, traits, cloning, magic methods e property hooks.</p>
+<div class="grid-4" style="margin-top:30px">
+<span class="pill fragment">class</span>
+<span class="pill fragment">new</span>
+<span class="pill fragment">$this</span>
+<span class="pill fragment">__construct</span>
+<span class="pill fragment">public</span>
+<span class="pill fragment">private</span>
+<span class="pill fragment">clone</span>
+<span class="pill fragment">property hooks</span>
+</div>
+<small class="source">Base: PHP Manual — Classes and Objects; PHP 8.4 Release Announcement.</small>
+</section>
+<section class="code-slide">
+<span class="eyebrow">Anatomia de uma classe</span>
+<h2>O que aparece dentro de <code>class Produto</code>?</h2>
+<pre><code class="language-php" data-line-numbers="1|3-5|7-10|12-15">&lt;?php
+class Produto
+{
+    public string $nome;
+    public float $preco;
+
+    public function aplicarDesconto(float $percentual): void
+    {
+        $this-&gt;preco -= $this-&gt;preco * ($percentual / 100);
+    }
+
+    public function precoFormatado(): string
+    {
+        return 'R$ ' . number_format($this-&gt;preco, 2, ',', '.');
+    }
+}</code></pre>
+<p class="fragment"><code>public string $nome</code> cria uma propriedade tipada. <code>public function</code> cria um método. <code>$this</code> aponta para o objeto atual.</p>
+</section>
+<section>
+<span class="eyebrow">Propriedades</span>
+<h2>Propriedades representam estado — mas estado precisa de regra</h2>
+<div class="grid-2">
+<div>
+<pre><code class="language-php" data-line-numbers="">&lt;?php
+class Produto
+{
+    public string $nome;
+    public float $preco;
+    public int $estoque;
+}</code></pre>
+</div>
+<div class="card">
+<h3>O problema do acesso livre</h3>
+<p class="fragment">Se tudo é público, qualquer parte do sistema pode fazer:</p>
+<pre class="fragment"><code class="language-php">$produto-&gt;preco = -1000;
+$produto-&gt;estoque = -50;</code></pre>
+<p class="fragment">O objeto passa a aceitar estados impossíveis.</p>
+</div>
+</div>
+</section>
+<section class="code-slide">
+<span class="eyebrow">Métodos</span>
+<h2>Métodos expressam operações válidas no domínio</h2>
+<pre><code class="language-php" data-line-numbers="1-5|7-14|16-19">&lt;?php
+class Produto
+{
+    private int $estoque;
+
+    public function reservar(int $quantidade): void
+    {
+        if ($quantidade &lt;= 0) {
+            throw new InvalidArgumentException('Quantidade inválida.');
+        }
+
+        if ($quantidade &gt; $this-&gt;estoque) {
+            throw new RuntimeException('Estoque insuficiente.');
+        }
+
+        $this-&gt;estoque -= $quantidade;
+    }
+}</code></pre>
+<div class="callout blue fragment"><p>Em POO, métodos devem contar uma história: <strong>o que esse objeto permite que façam com ele?</strong></p></div>
+</section>
+<section>
+<span class="eyebrow">$this</span>
+<h2><code>$this</code> é a forma do objeto falar de si mesmo</h2>
+<div class="grid-2">
+<div class="card">
+<h3>Dentro da classe</h3>
+<pre><code class="language-php">$this-&gt;preco
+$this-&gt;estoque
+$this-&gt;reservar(2)</code></pre>
+<p>“Este objeto aqui, nesta execução.”</p>
+</div>
+<div class="card fragment fade-up">
+<h3>Fora da classe</h3>
+<pre><code class="language-php">$produto-&gt;preco
+$produto-&gt;reservar(2)</code></pre>
+<p>Uma variável externa aponta para um objeto específico.</p>
+</div>
+</div>
+<p class="quote fragment">Se a classe é o texto da peça, <code>$this</code> é o ator que está no palco naquele momento.</p>
+</section>
+<section>
+<span class="eyebrow">Criação de objetos</span>
+<h2><code>new</code> cria uma instância em tempo de execução</h2>
+<pre><code class="language-php" data-line-numbers="1|2|4|5">&lt;?php
+$teclado = new Produto();
+$mouse = new Produto();
+
+$teclado-&gt;nome = 'Teclado Mecânico';
+$mouse-&gt;nome = 'Mouse Gamer';</code></pre>
+<div class="grid-2" style="margin-top:24px">
+<div class="card fragment"><h3>O código da classe</h3><p>Existe antes da execução como definição.</p></div>
+<div class="card fragment"><h3>O objeto</h3><p>Existe durante a execução como entidade concreta em memória.</p></div>
+</div>
+</section>
+<section>
+<span class="eyebrow">Identidade em PHP</span>
+<h2>A variável não contém o objeto inteiro: contém um identificador para acessá-lo</h2>
+<pre><code class="language-php" data-line-numbers="">&lt;?php
+$a = new Produto();
+$a-&gt;nome = 'Camiseta';
+
+$b = $a;
+$b-&gt;nome = 'Camiseta Premium';
+
+echo $a-&gt;nome; // Camiseta Premium</code></pre>
+<div class="callout blue fragment"><p>No PHP, ao atribuir ou passar um objeto, as variáveis recebem uma cópia do identificador que aponta para o mesmo objeto — não uma cópia independente do objeto.</p></div>
+<small class="source">Base: PHP Manual — Objects and references.</small>
+</section>
+<section>
+<span class="eyebrow">Comparação</span>
+<h2>Duas variáveis podem apontar para o mesmo objeto</h2>
+<pre><code class="language-php" data-line-numbers="">&lt;?php
+$a = new Produto();
+$b = $a;
+$c = new Produto();
+
+var_dump($a === $b); // true: mesma instância
+var_dump($a === $c); // false: instâncias diferentes</code></pre>
+<p class="fragment big">Para objetos, <code>===</code> pergunta: “é exatamente a mesma instância?”</p>
+</section>
+<section>
+<span class="eyebrow">Clonagem</span>
+<h2><code>clone</code> cria outro objeto — mas cuidado com cópia rasa</h2>
+<pre><code class="language-php" data-line-numbers="">&lt;?php
+$original = new Produto();
+$original-&gt;nome = 'Caneca';
+
+$copia = clone $original;
+$copia-&gt;nome = 'Caneca Azul';
+
+echo $original-&gt;nome; // Caneca
+echo $copia-&gt;nome;    // Caneca Azul</code></pre>
+<div class="callout warn fragment"><p>O PHP faz uma <strong>shallow copy</strong>: propriedades que também apontam para objetos precisam de atenção em cópias profundas.</p></div>
+<small class="source">Base: PHP Manual — Object Cloning.</small>
+</section>
+<section class="code-slide">
+<span class="eyebrow">Construtores</span>
+<h2>Construtor coloca o objeto em estado válido desde o nascimento</h2>
+<pre><code class="language-php" data-line-numbers="1-4|6-12|14-18">&lt;?php
+class Produto
+{
+    private string $nome;
+    private float $preco;
+
+    public function __construct(string $nome, float $preco)
+    {
+        if ($preco &lt;= 0) {
+            throw new InvalidArgumentException('Preço deve ser positivo.');
+        }
+
+        $this-&gt;nome = $nome;
+        $this-&gt;preco = $preco;
+    }
+}
+
+$produto = new Produto('Teclado Mecânico', 250.00);</code></pre>
+<p class="fragment">A mensagem é: “não existe produto válido sem nome e preço positivo”.</p>
+</section>
+<section>
+<span class="eyebrow">PHP moderno</span>
+<h2>Promoção de propriedades reduz boilerplate</h2>
+<div class="two-code">
+<div>
+<p class="code-caption">Forma clássica</p>
+<pre><code class="language-php">class Produto
+{
+    private string $nome;
+    private float $preco;
+
+    public function __construct(
+        string $nome,
+        float $preco
+    ) {
+        $this-&gt;nome = $nome;
+        $this-&gt;preco = $preco;
+    }
+}</code></pre>
+</div>
+<div class="fragment fade-up">
+<p class="code-caption">Com property promotion</p>
+<pre><code class="language-php">class Produto
+{
+    public function __construct(
+        private string $nome,
+        private float $preco
+    ) {}
+}</code></pre>
+</div>
+</div>
+<p class="fragment">Menos repetição. Mesma ideia: parâmetros do construtor viram propriedades do objeto.</p>
+</section>
+<section class="code-slide">
+<span class="eyebrow">Construtor com regra</span>
+<h2>Promoção não impede validação</h2>
+<pre><code class="language-php" data-line-numbers="1-6|8-15|17-20">&lt;?php
+class Produto
+{
+    public function __construct(
+        private string $nome,
+        private float $preco
+    ) {
+        if (trim($this-&gt;nome) === '') {
+            throw new InvalidArgumentException('Nome obrigatório.');
+        }
+
+        if ($this-&gt;preco &lt;= 0) {
+            throw new InvalidArgumentException('Preço deve ser positivo.');
+        }
+    }
+
+    public function preco(): float
+    {
+        return $this-&gt;preco;
+    }
+}</code></pre>
+</section>
+<section>
+<span class="eyebrow">Encapsulamento</span>
+<h2>Encapsular é controlar como o estado pode mudar</h2>
+<div class="grid-2">
+<div class="card fragment fade-up">
+<h3>Sem encapsular</h3>
+<pre><code class="language-php">$produto-&gt;preco = -10;
+$produto-&gt;estoque = -5;</code></pre>
+<p>O sistema permite estados inválidos.</p>
+</div>
+<div class="card fragment fade-up">
+<h3>Encapsulado</h3>
+<pre><code class="language-php">$produto-&gt;alterarPreco(199.90);
+$produto-&gt;reservar(2);</code></pre>
+<p>A mudança passa por uma regra do próprio objeto.</p>
+</div>
+</div>
+<p class="quote fragment">Encapsulamento não é esconder por esconder. É preservar a verdade interna do objeto.</p>
+</section>
+<section>
+<span class="eyebrow">Visibilidade</span>
+<h2><code>public</code>, <code>private</code> e <code>protected</code> definem fronteiras</h2>
+<table class="comparison">
+<thead><tr><th>Modificador</th><th>Quem acessa?</th><th>Uso didático nesta unidade</th></tr></thead>
+<tbody>
+<tr class="fragment"><td><code>public</code></td><td>Qualquer código.</td><td>Métodos que representam ações permitidas.</td></tr>
+<tr class="fragment"><td><code>private</code></td><td>Apenas a própria classe.</td><td>Estado interno que precisa de controle.</td></tr>
+<tr class="fragment"><td><code>protected</code></td><td>Classe e subclasses.</td><td>Guardar para herança; usar com cautela.</td></tr>
+</tbody>
+</table>
+<small class="source">Base: PHP Manual — Visibility.</small>
+</section>
+<section>
+<span class="eyebrow">Invariantes</span>
+<h2>Uma invariante é uma regra que deve continuar verdadeira</h2>
+<div class="grid-2">
+<div class="card">
+<h3>Produto</h3>
+<ul>
+<li class="fragment">preço deve ser maior que zero;</li>
+<li class="fragment">estoque não pode ser negativo;</li>
+<li class="fragment">nome não pode ser vazio.</li>
+</ul>
+</div>
+<div class="card">
+<h3>ContaBancaria</h3>
+<ul>
+<li class="fragment">saldo não pode ficar negativo se não houver limite;</li>
+<li class="fragment">saque precisa respeitar regras;</li>
+<li class="fragment">depósito precisa ser positivo.</li>
+</ul>
+</div>
+</div>
+<div class="callout mint fragment"><p>O bom objeto não apenas guarda dados: ele impede que o sistema conte mentiras sobre o domínio.</p></div>
+</section>
+<section>
+<span class="eyebrow">Property Hooks — PHP 8.4</span>
+<h2>PHP 8.4 aproxima propriedades de regras explícitas de acesso</h2>
+<pre><code class="language-php" data-line-numbers="1-5|7-12|14-19">&lt;?php
+class Produto
+{
+    public function __construct(
+        public string $nome,
+        private float $precoBase
+    ) {}
+
+    public float $precoComImposto {
+        get =&gt; $this-&gt;precoBase * 1.12;
+    }
+}</code></pre>
+<p class="fragment">Property hooks foram introduzidos no PHP 8.4 e permitem definir comportamento em operações de leitura e escrita de propriedades.</p>
+<small class="source">Base: PHP Manual — Property Hooks; PHP 8.4 Release Announcement.</small>
+</section>
+<section>
+<span class="eyebrow">Cuidado pedagógico</span>
+<h2>Property hooks não substituem pensar o modelo</h2>
+<div class="grid-2">
+<div class="card fragment">
+<h3>Use para</h3>
+<p>Propriedades calculadas, validações pontuais e APIs mais expressivas.</p>
+</div>
+<div class="card fragment">
+<h3>Evite para</h3>
+<p>Transformar todas as regras de negócio em “mágica” escondida na leitura/escrita.</p>
+</div>
+</div>
+<p class="quote fragment">Ferramenta moderna não corrige modelo mal pensado.</p>
+</section>
+<section>
+<span class="eyebrow">Getters e setters</span>
+<h2>Não crie métodos mecânicos sem intenção</h2>
+<div class="two-code">
+<div class="fragment fade-up">
+<p class="code-caption">Anêmico: só expõe dados</p>
+<pre><code class="language-php">$produto-&gt;setPreco(-10);
+$produto-&gt;setEstoque(-5);
+$produto-&gt;setNome('');</code></pre>
+</div>
+<div class="fragment fade-up">
+<p class="code-caption">Expressivo: fala o domínio</p>
+<pre><code class="language-php">$produto-&gt;alterarPreco(199.90);
+$produto-&gt;reservar(2);
+$produto-&gt;renomear('Teclado');</code></pre>
+</div>
+</div>
+<div class="callout blue fragment"><p>Um setter que não valida nada costuma ser apenas uma propriedade pública com passos extras.</p></div>
+</section>
+<section>
+<span class="eyebrow">Objeto anêmico</span>
+<h2>Quando a classe vira só uma tabela em forma de código</h2>
+<pre><code class="language-php" data-line-numbers="">&lt;?php
+class Produto
+{
+    public string $nome;
+    public float $preco;
+    public int $estoque;
+}
+
+class ProdutoService
+{
+    public function aplicarDesconto(Produto $produto, float $percentual): void
+    {
+        $produto-&gt;preco -= $produto-&gt;preco * ($percentual / 100);
+    }
+}</code></pre>
+<p class="fragment">Serviços são úteis, mas nem toda regra deve ser arrancada do objeto que melhor conhece seus próprios dados.</p>
+</section>
+<section>
+<span class="eyebrow">Responsabilidade</span>
+<h2>A pergunta mais importante: “quem deve saber fazer isso?”</h2>
+<div class="grid-3">
+<div class="card fragment"><h3>Produto</h3><p>Conhece preço, nome, disponibilidade e regras do próprio estoque.</p></div>
+<div class="card fragment"><h3>Carrinho</h3><p>Conhece itens escolhidos, total parcial e quantidade por produto.</p></div>
+<div class="card fragment"><h3>Pedido</h3><p>Conhece confirmação, status, pagamento e fechamento da compra.</p></div>
+</div>
+<p class="quote fragment">POO é uma forma de distribuir responsabilidade, não apenas de organizar arquivos.</p>
+</section>
+<section>
+<span class="eyebrow">CRC Cards</span>
+<h2>Uma técnica simples para pensar antes de codar</h2>
+<div class="grid-3">
+<div class="card fragment fade-up"><h3>Classe</h3><p>Qual conceito do domínio merece existir no código?</p></div>
+<div class="card fragment fade-up"><h3>Responsabilidades</h3><p>O que essa classe sabe ou faz?</p></div>
+<div class="card fragment fade-up"><h3>Colaboradores</h3><p>Com quais outros objetos ela conversa?</p></div>
+</div>
+<div class="callout blue fragment"><p>Antes de discutir sintaxe, pergunte: “essa classe tem motivo claro para existir?”</p></div>
+</section>
+<section>
+<span class="eyebrow">Exemplo guiado</span>
+<h2>Mini domínio: loja simples via terminal</h2>
+<p class="big">Vamos modelar um fluxo mínimo: criar produtos, adicionar ao carrinho e calcular total.</p>
+<div class="diagram fragment fade-up">
+<div class="node" style="left:80px;top:165px">Produto<small>preço e estoque</small></div>
+<div class="arrow" style="left:260px;top:213px;width:170px;transform:rotate(0deg)"></div>
+<div class="node" style="left:455px;top:115px">ItemCarrinho<small>produto + quantidade</small></div>
+<div class="arrow" style="left:620px;top:195px;width:150px;transform:rotate(18deg)"></div>
+<div class="node" style="left:795px;top:165px">Carrinho<small>lista de itens</small></div>
+<div class="node" style="left:455px;top:295px">app.php<small>orquestra o teste</small></div>
+</div>
+</section>
+<section>
+<span class="eyebrow">Modelando Produto</span>
+<h2>Comece com estado mínimo e regras essenciais</h2>
+<pre><code class="language-php" data-line-numbers="1-2|4-8|10-19|21-29|31-34">&lt;?php
+namespace App;
+
+class Produto
+{
+    public function __construct(
+        private string $nome,
+        private float $preco,
+        private int $estoque
+    ) {
+        if (trim($this-&gt;nome) === '') {
+            throw new \InvalidArgumentException('Nome obrigatório.');
+        }
+        if ($this-&gt;preco &lt;= 0) {
+            throw new \InvalidArgumentException('Preço inválido.');
+        }
+        if ($this-&gt;estoque &lt; 0) {
+            throw new \InvalidArgumentException('Estoque inválido.');
+        }
+    }
+
+    public function reservar(int $quantidade): void
+    {
+        if ($quantidade &lt;= 0 || $quantidade &gt; $this-&gt;estoque) {
+            throw new \RuntimeException('Quantidade indisponível.');
+        }
+
+        $this-&gt;estoque -= $quantidade;
+    }
+
+    public function preco(): float
+    {
+        return $this-&gt;preco;
+    }
+}</code></pre>
+</section>
+<section>
+<span class="eyebrow">Modelando ItemCarrinho</span>
+<h2>Uma classe pode representar uma relação</h2>
+<pre><code class="language-php" data-line-numbers="1-4|6-14|16-19">&lt;?php
+namespace App;
+
+class ItemCarrinho
+{
+    public function __construct(
+        private Produto $produto,
+        private int $quantidade
+    ) {
+        if ($this-&gt;quantidade &lt;= 0) {
+            throw new \InvalidArgumentException('Quantidade inválida.');
+        }
+
+        $this-&gt;produto-&gt;reservar($this-&gt;quantidade);
+    }
+
+    public function subtotal(): float
+    {
+        return $this-&gt;produto-&gt;preco() * $this-&gt;quantidade;
+    }
+}</code></pre>
+<p class="fragment">O item não é apenas quantidade: ele sabe calcular o subtotal daquela escolha.</p>
+</section>
+<section>
+<span class="eyebrow">Modelando Carrinho</span>
+<h2>Um objeto também pode guardar uma coleção de outros objetos</h2>
+<pre><code class="language-php" data-line-numbers="1-6|8-11|13-20">&lt;?php
+namespace App;
+
+class Carrinho
+{
+    /** @var ItemCarrinho[] */
+    private array $itens = [];
+
+    public function adicionar(Produto $produto, int $quantidade): void
+    {
+        $this-&gt;itens[] = new ItemCarrinho($produto, $quantidade);
+    }
+
+    public function total(): float
+    {
+        return array_reduce(
+            $this-&gt;itens,
+            fn (float $total, ItemCarrinho $item) =&gt; $total + $item-&gt;subtotal(),
+            0.0
+        );
+    }
+}</code></pre>
+</section>
+<section>
+<span class="eyebrow">Namespaces</span>
+<h2>Namespaces evitam colisão de nomes e organizam o domínio</h2>
+<div class="grid-2">
+<div>
+<pre><code class="language-php" data-line-numbers="">&lt;?php
+namespace App\Loja;
+
+class Produto
+{
+    // ...
+}</code></pre>
+</div>
+<div class="card fragment fade-up">
+<h3>Por que usar?</h3>
+<p>Em projetos reais, várias bibliotecas podem ter classes chamadas <code>Produto</code>, <code>User</code>, <code>Order</code> ou <code>Controller</code>.</p>
+<p>Namespace é como o endereço completo da classe.</p>
+</div>
+</div>
+</section>
+<section>
+<span class="eyebrow">Autoload</span>
+<h2>Em projeto moderno, não queremos dezenas de <code>require</code></h2>
+<div class="two-code">
+<div class="fragment fade-up">
+<p class="code-caption">Manual e frágil</p>
+<pre><code class="language-php">require 'src/Produto.php';
+require 'src/ItemCarrinho.php';
+require 'src/Carrinho.php';</code></pre>
+</div>
+<div class="fragment fade-up">
+<p class="code-caption">Com Composer</p>
+<pre><code class="language-php">require 'vendor/autoload.php';
+
+use App\Carrinho;
+use App\Produto;</code></pre>
+</div>
+</div>
+<div class="callout blue fragment"><p>Autoload carrega a classe quando ela é usada, seguindo uma regra de mapeamento.</p></div>
+</section>
+<section>
+<span class="eyebrow">PSR-4</span>
+<h2>PSR-4 mapeia namespace para caminho de arquivo</h2>
+<pre><code class="language-json" data-line-numbers="">{
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  }
+}</code></pre>
+<div class="grid-2" style="margin-top:20px">
+<div class="card fragment"><h3><code>App\Produto</code></h3><p>Composer procura em <code>src/Produto.php</code>.</p></div>
+<div class="card fragment"><h3><code>App\Loja\Produto</code></h3><p>Composer procura em <code>src/Loja/Produto.php</code>.</p></div>
+</div>
+<small class="source">Base: PHP-FIG PSR-4; Composer schema.</small>
+</section>
+<section>
+<span class="eyebrow">Estrutura de projeto</span>
+<h2>Organizando um projeto PHP de terminal com objetos</h2>
+<pre><code class="language-text">minha-loja/
+├── composer.json
+├── app.php
+├── src/
+│   ├── Produto.php
+│   ├── ItemCarrinho.php
+│   └── Carrinho.php
+└── vendor/
+    └── autoload.php</code></pre>
+<div class="callout mint fragment"><p>O foco da unidade não é framework: é entender como objetos nascem, colaboram e mantêm regras em um projeto PHP simples.</p></div>
+</section>
+<section>
+<span class="eyebrow">Execução via terminal</span>
+<h2>Fechando o fluxo mínimo</h2>
+<pre><code class="language-php" data-line-numbers="1|3-4|6-9|11">&lt;?php
+require __DIR__ . '/vendor/autoload.php';
+
+use App\Carrinho;
+use App\Produto;
+
+$teclado = new Produto('Teclado Mecânico', 250.00, 10);
+$mouse = new Produto('Mouse Gamer', 90.00, 35);
+
+$carrinho = new Carrinho();
+$carrinho-&gt;adicionar($teclado, 2);
+$carrinho-&gt;adicionar($mouse, 1);
+
+echo 'Total: R$ ' . number_format($carrinho-&gt;total(), 2, ',', '.') . PHP_EOL;</code></pre>
+<pre class="fragment"><code class="language-bash">composer dump-autoload
+php app.php</code></pre>
+</section>
+<section>
+<span class="eyebrow">Comparação mental</span>
+<h2>Procedural pergunta “qual função chamo?”; POO pergunta “qual objeto sabe fazer?”</h2>
+<table class="comparison progress-table">
+<thead><tr><th>Situação</th><th>Pensamento procedural</th><th>Pensamento OO</th></tr></thead>
+<tbody>
+<tr class="fragment"><td>Aplicar desconto</td><td>Função recebe array e retorna array.</td><td><code>Produto</code> altera seu preço obedecendo regra.</td></tr>
+<tr class="fragment"><td>Reservar estoque</td><td>Subtrai índice <code>estoque</code> em algum lugar.</td><td><code>Produto::reservar()</code> valida e atualiza.</td></tr>
+<tr class="fragment"><td>Totalizar compra</td><td>Loop solto sobre arrays.</td><td><code>Carrinho::total()</code> soma subtotais dos itens.</td></tr>
+</tbody>
+</table>
+</section>
+<section>
+<span class="eyebrow">Erro comum 1</span>
+<h2>“Classe é só uma forma de separar arquivo”</h2>
+<div class="callout warn"><p>Não. Classes devem representar conceitos, tipos e responsabilidades. Separar arquivo sem separar responsabilidade só muda a bagunça de lugar.</p></div>
+<div class="grid-2" style="margin-top:30px">
+<div class="card fragment"><h3>Pior sinal</h3><p>Classe chamada <code>Funcoes</code>, <code>Utils</code>, <code>Manager</code> fazendo tudo.</p></div>
+<div class="card fragment"><h3>Melhor sinal</h3><p>Classes com nomes do domínio: <code>Pedido</code>, <code>Carrinho</code>, <code>Produto</code>, <code>Aluno</code>, <code>Matricula</code>.</p></div>
+</div>
+</section>
+<section>
+<span class="eyebrow">Erro comum 2</span>
+<h2>“Todo dado precisa de getter e setter”</h2>
+<p class="big">Getters podem ser úteis para consulta. Setters sem regra podem quebrar a integridade do objeto.</p>
+<pre><code class="language-php" data-line-numbers="">&lt;?php
+$pedido-&gt;setStatus('pago');      // Quem validou pagamento?
+$pedido-&gt;setTotal(-100);         // Total negativo?
+$pedido-&gt;setItens([]);           // Pedido vazio depois de fechado?</code></pre>
+<div class="callout blue fragment"><p>Prefira métodos que expressem intenção: <code>confirmarPagamento()</code>, <code>cancelar()</code>, <code>adicionarItem()</code>.</p></div>
+</section>
+<section>
+<span class="eyebrow">Erro comum 3</span>
+<h2>“Objeto é sempre melhor que função”</h2>
+<p class="question">Não transforme POO em religião.</p>
+<div class="grid-2">
+<div class="card fragment"><h3>Função pode ser suficiente</h3><p>Operação pura, simples e sem estado relevante.</p></div>
+<div class="card fragment"><h3>Objeto faz sentido</h3><p>Há estado, regra, identidade, ciclo de vida ou colaboração.</p></div>
+</div>
+<p class="fragment">Boa engenharia é escolher a abstração que reduz complexidade, não a que parece mais sofisticada.</p>
+</section>
+<section>
+<span class="eyebrow">Entidades e Value Objects</span>
+<h2>Nem todo objeto tem o mesmo tipo de identidade</h2>
+<div class="grid-2">
+<div class="card fragment fade-up">
+<h3>Entidade</h3>
+<p>Importa quem é. Pode mudar com o tempo mantendo identidade.</p>
+<p><code>Pedido #1024</code>, <code>Aluno RA 123</code>, <code>Cliente ID 7</code>.</p>
+</div>
+<div class="card fragment fade-up">
+<h3>Value Object</h3>
+<p>Importa o valor. Dois objetos com os mesmos valores são equivalentes.</p>
+<p><code>CPF</code>, <code>Email</code>, <code>Dinheiro</code>, <code>Endereco</code>.</p>
+</div>
+</div>
+<div class="callout blue fragment"><p>Essa distinção ajuda a decidir mutabilidade, comparação e responsabilidade.</p></div>
+</section>
+<section>
+<span class="eyebrow">Exemplo: Value Object</span>
+<h2>Preço pode virar conceito, não apenas número</h2>
+<pre><code class="language-php" data-line-numbers="1-5|7-13|15-18|20-23">&lt;?php
+class Dinheiro
+{
+    public function __construct(
+        private int $centavos
+    ) {
+        if ($this-&gt;centavos &lt; 0) {
+            throw new InvalidArgumentException('Valor não pode ser negativo.');
+        }
+    }
+
+    public function somar(Dinheiro $outro): Dinheiro
+    {
+        return new Dinheiro($this-&gt;centavos + $outro-&gt;centavos);
+    }
+
+    public function formatar(): string
+    {
+        return 'R$ ' . number_format($this-&gt;centavos / 100, 2, ',', '.');
+    }
+}</code></pre>
+<p class="fragment">Um objeto pequeno pode impedir muitos bugs de arredondamento, sinal e formatação.</p>
+</section>
+<section>
+<span class="eyebrow">Mutabilidade</span>
+<h2>Um objeto pode mudar — mas nem sempre deveria</h2>
+<div class="grid-2">
+<div class="card fragment"><h3>Mutável</h3><p><code>Carrinho</code> muda quando adicionamos itens. Faz sentido: ele representa um processo em andamento.</p></div>
+<div class="card fragment"><h3>Imutável</h3><p><code>Email</code> ou <code>Dinheiro</code> podem nascer válidos e nunca mudar. Para alterar, crie outro objeto.</p></div>
+</div>
+<div class="callout mint fragment"><p>Objetos imutáveis reduzem efeitos colaterais e facilitam raciocinar sobre o programa.</p></div>
+</section>
+<section>
+<span class="eyebrow">UML minimalista</span>
+<h2>Diagrama de classe ajuda a enxergar o desenho</h2>
+<div style="display:flex;gap:32px;align-items:center;justify-content:center;margin-top:20px">
+<div class="class-box fragment fade-up">
+<div class="head">Produto</div>
+<div class="part">- nome<br/>- preco<br/>- estoque</div>
+<div class="part">+ reservar(qtd)<br/>+ preco()</div>
+</div>
+<div class="class-box fragment fade-up">
+<div class="head">Carrinho</div>
+<div class="part">- itens</div>
+<div class="part">+ adicionar(produto, qtd)<br/>+ total()</div>
+</div>
+</div>
+<p class="fragment center big" style="margin-top:32px">Diagrama não substitui código — ele antecipa conversas de design.</p>
+</section>
+<section>
+<span class="eyebrow">Critérios de qualidade</span>
+<h2>Como saber se a classe está bem modelada?</h2>
+<div class="grid-2">
+<div class="card"><h3>Bons sinais</h3><ul>
+<li class="fragment">nome vem do domínio;</li>
+<li class="fragment">tem poucas responsabilidades coesas;</li>
+<li class="fragment">protege invariantes;</li>
+<li class="fragment">métodos expressam ações reais.</li>
+</ul></div>
+<div class="card"><h3>Sinais de alerta</h3><ul>
+<li class="fragment">classe gigante;</li>
+<li class="fragment">muitos setters públicos;</li>
+<li class="fragment">estado público demais;</li>
+<li class="fragment">nome genérico: <code>Manager</code>, <code>Helper</code>, <code>Utils</code>.</li>
+</ul></div>
+</div>
+</section>
+<section>
+<span class="eyebrow">Leitura de código</span>
+<h2>O que esse código comunica?</h2>
+<pre><code class="language-php" data-line-numbers="">&lt;?php
+$pedido-&gt;adicionarItem($produto, 2);
+$pedido-&gt;aplicarCupom($cupom);
+$pedido-&gt;confirmarPagamento($pagamento);
+$pedido-&gt;enviarParaSeparacao();</code></pre>
+<p class="question fragment">Mesmo sem ver a implementação, dá para entender o fluxo de negócio?</p>
+<div class="callout blue fragment"><p>Esse é um dos maiores ganhos da POO bem aplicada: o código começa a falar a língua do problema.</p></div>
+</section>
+<section>
+<span class="eyebrow">Atividade em sala</span>
+<h2>Desafio: modelar antes de implementar</h2>
+<p class="big">Cenário: uma cantina precisa controlar pedidos feitos por alunos durante o intervalo.</p>
+<div class="exercise-step fragment"><span class="badge">1</span><p>Liste os conceitos principais: aluno, produto, pedido, item do pedido, pagamento?</p></div>
+<div class="exercise-step fragment"><span class="badge">2</span><p>Escolha 3 classes iniciais e escreva responsabilidades de cada uma.</p></div>
+<div class="exercise-step fragment"><span class="badge">3</span><p>Defina propriedades e métodos sem codar ainda.</p></div>
+<div class="exercise-step fragment"><span class="badge">4</span><p>Implemente uma versão mínima em PHP rodando via terminal.</p></div>
+</section>
+<section>
+<span class="eyebrow">Checklist da implementação</span>
+<h2>Entrega mínima do exercício</h2>
+<div class="grid-2">
+<div class="card">
+<h3>Estrutura</h3>
+<ul>
+<li class="fragment"><code>composer.json</code> com PSR-4;</li>
+<li class="fragment">classes em <code>src/</code>;</li>
+<li class="fragment"><code>app.php</code> para testar pelo terminal;</li>
+<li class="fragment">sem framework.</li>
+</ul>
+</div>
+<div class="card">
+<h3>POO</h3>
+<ul>
+<li class="fragment">construtores com estado válido;</li>
+<li class="fragment">propriedades privadas quando houver regra;</li>
+<li class="fragment">métodos com nomes expressivos;</li>
+<li class="fragment">pelo menos uma colaboração entre objetos.</li>
+</ul>
+</div>
+</div>
+</section>
+<section>
+<span class="eyebrow">Mini roteiro de terminal</span>
+<h2>Passos para começar do zero</h2>
+<pre><code class="language-bash" data-line-numbers="">mkdir cantina-poo
+cd cantina-poo
+composer init
+mkdir src
+touch app.php src/Produto.php src/Pedido.php src/ItemPedido.php
+composer dump-autoload
+php app.php</code></pre>
+<p class="fragment">No <code>composer.json</code>, configure <code>"App\\": "src/"</code> em <code>autoload.psr-4</code>.</p>
+</section>
+<section>
+<span class="eyebrow">Perguntas de revisão</span>
+<h2>Antes de sair da aula, responda sem decorar</h2>
+<ol>
+<li class="fragment">Qual a diferença entre classe e objeto?</li>
+<li class="fragment">O que <code>$this</code> representa?</li>
+<li class="fragment">Por que construtores ajudam a evitar estados inválidos?</li>
+<li class="fragment">Por que objetos em PHP exigem cuidado com atribuição e cópia?</li>
+<li class="fragment">Como PSR-4 conecta namespace e arquivo?</li>
+</ol>
+</section>
+<section>
+<span class="eyebrow">Síntese</span>
+<h2>O que levamos da Unidade 3?</h2>
+<div class="grid-2">
+<div class="card fragment fade-up"><h3>Ideia central</h3><p>Objetos são unidades com identidade, estado, comportamento e responsabilidade.</p></div>
+<div class="card fragment fade-up"><h3>PHP</h3><p>Classes, propriedades, métodos, <code>$this</code>, <code>new</code> e construtores materializam o modelo.</p></div>
+<div class="card fragment fade-up"><h3>Qualidade</h3><p>Encapsulamento protege invariantes e reduz estados impossíveis.</p></div>
+<div class="card fragment fade-up"><h3>Projeto real</h3><p>Namespaces, Composer e PSR-4 deixam o código escalável desde o começo.</p></div>
+</div>
+</section>
+<section>
+<span class="eyebrow">Frase final</span>
+<h2>Classes bem desenhadas são decisões pedagógicas do código</h2>
+<p class="quote">Elas ensinam ao próximo programador quais conceitos existem, quais regras importam e quais ações fazem sentido.</p>
+<p class="fragment big">Quando o modelo melhora, o código deixa de ser apenas instrução e passa a ser comunicação.</p>
+</section>
+<section>
+<span class="eyebrow">Referências essenciais</span>
+<h2>Fontes usadas na pesquisa complementar</h2>
+<ul>
+<li>PHP Manual — Classes and Objects: <a href="https://www.php.net/manual/en/language.oop5.php">php.net/manual/en/language.oop5.php</a></li>
+<li>PHP Manual — The Basics: <a href="https://www.php.net/manual/en/language.oop5.basic.php">php.net/manual/en/language.oop5.basic.php</a></li>
+<li>PHP Manual — Objects and references: <a href="https://www.php.net/manual/en/language.oop5.references.php">php.net/manual/en/language.oop5.references.php</a></li>
+<li>PHP Manual — Object Cloning: <a href="https://www.php.net/manual/en/language.oop5.cloning.php">php.net/manual/en/language.oop5.cloning.php</a></li>
+<li>PHP Manual — Property Hooks: <a href="https://www.php.net/manual/en/language.oop5.property-hooks.php">php.net/manual/en/language.oop5.property-hooks.php</a></li>
+<li>PHP 8.4 Release Announcement: <a href="https://www.php.net/releases/8.4/en.php">php.net/releases/8.4/en.php</a></li>
+<li>PHP-FIG — PSR-4 Autoloader: <a href="https://www.php-fig.org/psr/psr-4/">php-fig.org/psr/psr-4/</a></li>
+<li>Composer schema — PSR-4 mapping: <a href="https://getcomposer.org/doc/04-schema.md#psr-4">getcomposer.org/doc/04-schema.md#psr-4</a></li>
+<li>ACM A.M. Turing Award — Ole-Johan Dahl and Kristen Nygaard: <a href="https://amturing.acm.org/award_winners/dahl_6917600.cfm">amturing.acm.org</a></li>
+<li>IEEE Milestones — Object-Oriented Programming, 1961–1967: <a href="https://ethw.org/Milestones:Object-Oriented_Programming,_1961-1967">ethw.org</a></li>
+</ul>
+</section>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/notes/notes.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/highlight/highlight.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/zoom/zoom.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: true,
+    controls: true,
+    progress: true,
+    center: false,
+    transition: 'fade',
+    backgroundTransition: 'fade',
+    width: 1280,
+    height: 720,
+    margin: 0.045,
+    plugins: [ RevealNotes, RevealHighlight, RevealZoom ]
+  });
+</script>
+</body>
+</html>

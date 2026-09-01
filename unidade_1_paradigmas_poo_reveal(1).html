@@ -1,0 +1,686 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unidade 1 — Paradigmas e fundamentos históricos</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css" id="theme">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/monokai.css">
+  <style>
+    :root{
+      --blue-900:#1f3552;
+      --blue-700:#365f91;
+      --blue-500:#6f97c8;
+      --blue-300:#a7c5df;
+      --blue-100:#e8f2f8;
+      --gray-900:#27313d;
+      --gray-700:#5d6875;
+      --gray-300:#d6dee7;
+      --gray-100:#f6f8fb;
+      --white:#ffffff;
+      --accent:#88b7cf;
+      --mint:#b8d8cc;
+      --lav:#c9c7e8;
+      --sand:#efe6d8;
+      --rose:#ead2d8;
+    }
+    *{box-sizing:border-box}
+    body{background:linear-gradient(135deg,var(--gray-100),#eef6fb 46%,#f8fbfd);}
+    .reveal{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Arial,sans-serif;color:var(--gray-900);}
+    .reveal .slides{width:100%;height:100%;}
+    .reveal section{padding:48px 62px;text-align:left;}
+    .reveal h1,.reveal h2,.reveal h3{color:var(--blue-900);letter-spacing:-.03em;text-transform:none;font-weight:760;margin:0 0 24px 0;line-height:1.02;}
+    .reveal h1{font-size:2.75em;max-width:980px;}
+    .reveal h2{font-size:1.88em;}
+    .reveal h3{font-size:1.15em;color:var(--blue-700);margin-bottom:12px;}
+    .reveal p,.reveal li{font-size:.64em;line-height:1.38;color:var(--gray-700);}
+    .reveal strong{color:var(--blue-900);font-weight:760;}
+    .reveal code{font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace;border-radius:10px;padding:.08em .24em;background:#eef4fa;color:#1f3552;}
+    .reveal pre{width:100%;box-shadow:none;border-radius:18px;overflow:hidden;margin:18px 0;}
+    .reveal pre code{font-size:.58em;line-height:1.35;max-height:470px;border-radius:18px;padding:20px;background:#162638;color:#ecf7ff;}
+    .kicker{font-size:.42em;letter-spacing:.14em;text-transform:uppercase;color:var(--blue-700);font-weight:740;margin-bottom:18px;}
+    .sub{font-size:.72em!important;color:var(--gray-700);max-width:980px;}
+    .quote{font-size:1.06em!important;line-height:1.2!important;color:var(--blue-900)!important;font-weight:720;letter-spacing:-.02em;max-width:1000px;}
+    .source{position:absolute;left:62px;bottom:24px;font-size:.30em!important;color:#8793a1!important;max-width:1050px;line-height:1.22!important;}
+    .slide-no{position:absolute;right:44px;bottom:24px;font-size:.3em;color:#a1aab5;}
+    .grid{display:grid;gap:22px;}
+    .cols-2{grid-template-columns:1fr 1fr;}
+    .cols-3{grid-template-columns:repeat(3,1fr);}
+    .cols-4{grid-template-columns:repeat(4,1fr);}
+    .card{background:rgba(255,255,255,.78);border:1px solid rgba(111,151,200,.22);border-radius:26px;padding:24px;box-shadow:0 20px 50px rgba(54,95,145,.08);}
+    .card.blue{background:linear-gradient(135deg,#eef7fc,#fff);border-color:#b9d2e8;}
+    .card.sand{background:#faf5ee;border-color:#ebdac7;}
+    .card.mint{background:#f0f8f4;border-color:#cee7dc;}
+    .card.lav{background:#f4f3fb;border-color:#d6d3f0;}
+    .pill{display:inline-block;border-radius:999px;background:#e5f1f7;color:var(--blue-700);padding:6px 12px;font-size:.36em;font-weight:720;margin:2px 6px 8px 0;}
+    .big-number{font-size:2.5em;color:#c2d5e7;font-weight:800;line-height:1;}
+    .timeline{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:28px;align-items:stretch;}
+    .time-item{border-top:4px solid var(--blue-300);padding:16px 12px;background:rgba(255,255,255,.72);border-radius:0 0 20px 20px;min-height:148px;}
+    .time-item b{display:block;color:var(--blue-900);font-size:.55em;margin-bottom:6px;}
+    .time-item span{display:block;color:var(--gray-700);font-size:.42em;line-height:1.25;}
+    .matrix{display:grid;grid-template-columns:1.1fr repeat(4,1fr);gap:10px;margin-top:18px;}
+    .mcell{background:#fff;border:1px solid #dfe8f1;border-radius:16px;padding:12px;min-height:72px;font-size:.42em;color:var(--gray-700);}
+    .mcell.head{background:#e8f2f8;color:var(--blue-900);font-weight:760;}
+    .mcell.label{background:#f3f6fa;color:var(--blue-900);font-weight:760;}
+    .mini{font-size:.45em!important;line-height:1.35!important;}
+    .tiny{font-size:.34em!important;line-height:1.25!important;}
+    .center{text-align:center;}
+    .stage{position:relative;min-height:360px;border-radius:32px;background:linear-gradient(135deg,#fff,#eef7fc);border:1px solid #c9dced;box-shadow:inset 0 0 0 1px rgba(255,255,255,.7);padding:26px;overflow:hidden;}
+    .diagram-row{display:flex;align-items:center;justify-content:center;gap:18px;margin:18px 0;}
+    .node{border:2px solid #bdd3e8;background:#fff;border-radius:22px;padding:18px 22px;min-width:156px;text-align:center;color:var(--blue-900);font-weight:760;font-size:.52em;box-shadow:0 12px 30px rgba(31,53,82,.08);}
+    .arrow{font-size:1em;color:var(--blue-500);font-weight:800;}
+    .loop{width:210px;height:210px;border:18px solid #d9e9f4;border-top-color:#6f97c8;border-radius:50%;margin:20px auto;animation:spin 4s linear infinite;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .pulse{animation:pulse 1.7s ease-in-out infinite;}
+    @keyframes pulse{0%,100%{transform:scale(1);box-shadow:0 0 0 rgba(111,151,200,0)}50%{transform:scale(1.05);box-shadow:0 0 0 14px rgba(111,151,200,.12)}}
+    .flow{display:flex;gap:14px;align-items:center;justify-content:center;margin-top:26px;flex-wrap:wrap;}
+    .flow .box{padding:14px 18px;border-radius:18px;background:#fff;border:1px solid #c9dced;color:var(--blue-900);font-size:.44em;font-weight:720;min-width:132px;text-align:center;}
+    .stack{position:relative;height:310px;margin-top:16px;}
+    .layer{position:absolute;left:50%;transform:translateX(-50%);width:68%;height:58px;border-radius:18px;border:1px solid #ccdbea;background:#fff;display:flex;align-items:center;justify-content:center;color:var(--blue-900);font-weight:760;font-size:.46em;box-shadow:0 12px 30px rgba(31,53,82,.08);}
+    .l1{top:0;background:#f7fbfe}.l2{top:64px;background:#eef7fc}.l3{top:128px;background:#e8f2f8}.l4{top:192px;background:#e5eef9}.l5{top:256px;background:#dce7f5}
+    .fragment.blur{filter:blur(3px);opacity:.35}.fragment.blur.visible{filter:blur(0);opacity:1}
+    .tagline{position:absolute;right:62px;top:42px;font-size:.36em;color:#96a4b2;font-weight:700;letter-spacing:.06em;text-transform:uppercase;}
+    .philosophy{font-size:1.1em!important;color:var(--blue-900)!important;line-height:1.2!important;letter-spacing:-.025em;font-weight:760;}
+    .small-code pre code{font-size:.44em;}
+    .quiz button{font-size:.44em;margin:8px 8px 0 0;border:0;border-radius:999px;background:#e8f2f8;color:#1f3552;padding:10px 16px;font-weight:740;cursor:pointer;}
+    .answer{display:none;margin-top:16px;background:#fff;border:1px solid #cee0ef;border-radius:20px;padding:18px;color:#3e5064;font-size:.5em;line-height:1.32;}
+    .answer.show{display:block;}
+    .footer-mark{position:absolute;right:62px;top:46px;width:94px;height:8px;border-radius:99px;background:linear-gradient(90deg,var(--blue-300),var(--mint),var(--lav));opacity:.8;}
+    .titlemark{width:170px;height:12px;border-radius:999px;background:linear-gradient(90deg,var(--blue-500),var(--blue-300),var(--mint));margin:28px 0;}
+    .two-pane{display:grid;grid-template-columns:1.05fr .95fr;gap:28px;align-items:center;}
+    .compare{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:16px;}
+    .compare .bad{background:#fff4f2;border-color:#efd1ce}.compare .good{background:#f1faf4;border-color:#cce7d6}
+    .big-word{font-size:3.5em;color:#d8e5f0;position:absolute;right:70px;bottom:70px;font-weight:840;letter-spacing:-.07em;z-index:-1;}
+    .fragment.current-visible:not(.current-fragment){display:none;}
+    .reveal .progress{color:var(--blue-500)}
+    .reveal .controls{color:var(--blue-500)}
+    .home-link{
+      position:fixed;
+      top:16px;
+      left:16px;
+      z-index:40;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      min-height:40px;
+      padding:9px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.9);
+      border:1px solid rgba(111,151,200,.35);
+      color:var(--blue-900);
+      font:700 14px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      text-decoration:none;
+      box-shadow:0 10px 26px rgba(31,53,82,.12);
+      backdrop-filter:blur(8px);
+    }
+    .home-link:hover{background:#fff;transform:translateY(-1px);}
+  </style>
+</head>
+<body>
+<a class="home-link" href="index.html" aria-label="Voltar ao menu inicial">← Menu</a>
+<div class="reveal">
+<div class="slides">
+
+<section data-background-gradient="linear-gradient(135deg,#f8fbfd,#e8f2f8)">
+  <div class="kicker">Programação Orientada a Objetos • Unidade 1</div>
+  <h1>Paradigmas e fundamentos históricos</h1>
+  <div class="titlemark"></div>
+  <p class="sub">Como diferentes formas de pensar organizam dados, operações, controle e responsabilidades — e por que isso muda a forma de projetar software.</p>
+  <p class="source">Base didática: disciplina de POO com PHP 8.4 • Estilo visual: tons pastel azul, cinza e branco.</p>
+</section>
+
+<section>
+  <div class="footer-mark"></div>
+  <h2>Questão orientadora</h2>
+  <p class="quote">Como diferentes paradigmas organizam dados, operações, controle e responsabilidades?</p>
+  <div class="grid cols-4" style="margin-top:42px">
+    <div class="card blue"><h3>Dados</h3><p>Onde ficam as informações? Variáveis, estruturas, fatos, objetos?</p></div>
+    <div class="card mint"><h3>Operações</h3><p>Como transformamos dados? Com comandos, funções, regras ou mensagens?</p></div>
+    <div class="card lav"><h3>Controle</h3><p>Quem decide o próximo passo? Fluxo explícito, avaliador, motor lógico, eventos?</p></div>
+    <div class="card sand"><h3>Responsabilidades</h3><p>Quem “sabe” fazer cada parte do problema?</p></div>
+  </div>
+  <p class="source">Referência conceitual: Van Roy & Haridi, “Concepts, Techniques, and Models of Computer Programming”, MIT Press, 2004.</p>
+</section>
+
+<section>
+  <h2>Antes de escrever código, escolhemos uma lente</h2>
+  <div class="two-pane">
+    <div>
+      <p class="philosophy">Paradigmas não são apenas “modos de usar uma linguagem”. São maneiras de <strong>modelar o problema</strong>.</p>
+      <p>O mesmo sistema pode ser descrito como sequência de comandos, composição de funções, conjunto de regras, resposta a eventos ou sociedade de objetos.</p>
+    </div>
+    <div class="stage">
+      <div class="flow">
+        <div class="box fragment">Problema</div><div class="arrow fragment">→</div>
+        <div class="box fragment">Modelo mental</div><div class="arrow fragment">→</div>
+        <div class="box fragment">Estrutura do código</div><div class="arrow fragment">→</div>
+        <div class="box fragment">Manutenção</div>
+      </div>
+    </div>
+  </div>
+  <p class="source">Van Roy & Haridi defendem o estudo de paradigmas por modelos computacionais e conceitos fundamentais, não apenas por sintaxe.</p>
+</section>
+
+<section>
+  <h2>Paradigma, linguagem, modelo e estilo</h2>
+  <div class="matrix">
+    <div class="mcell head">Termo</div><div class="mcell head">Pergunta</div><div class="mcell head">Exemplo</div><div class="mcell head">Risco de confusão</div><div class="mcell head">Na prática</div>
+    <div class="mcell label">Paradigma</div><div class="mcell">Como pensar a solução?</div><div class="mcell">Orientado a objetos</div><div class="mcell">Confundir com linguagem</div><div class="mcell">Organiza responsabilidades</div>
+    <div class="mcell label">Linguagem</div><div class="mcell">Com qual ferramenta escrevo?</div><div class="mcell">PHP, Java, C#</div><div class="mcell">Achar que há um único paradigma</div><div class="mcell">Oferece recursos e restrições</div>
+    <div class="mcell label">Modelo</div><div class="mcell">Que abstração formal sustenta?</div><div class="mcell">Estado mutável, funções, lógica</div><div class="mcell">Ignorar semântica</div><div class="mcell">Explica comportamento</div>
+    <div class="mcell label">Estilo</div><div class="mcell">Como o time aplica?</div><div class="mcell">DDD, procedural simples, event-driven</div><div class="mcell">Virar dogma</div><div class="mcell">Depende do contexto</div>
+  </div>
+  <p class="source">Síntese baseada em Van Roy & Haridi (2004) e em taxonomias de paradigmas de linguagens de programação.</p>
+</section>
+
+<section>
+  <h2>Linguagens multiparadigma</h2>
+  <p class="sub">A maioria das linguagens modernas não vive em uma “caixa pura”. Elas combinam recursos para resolver problemas reais.</p>
+  <div class="grid cols-3">
+    <div class="card blue"><h3>PHP 8.4</h3><p>Procedural, orientado a objetos, funcional parcial, eventos em frameworks, atributos, tipos e recursos modernos de OOP.</p></div>
+    <div class="card mint"><h3>JavaScript</h3><p>Funções de primeira classe, objetos prototipais, eventos, programação assíncrona e estilos funcionais.</p></div>
+    <div class="card lav"><h3>C# / Java / C++</h3><p>Fortes em OOP, mas com genéricos, lambdas, coleções funcionais, concorrência e ecossistemas diversos.</p></div>
+  </div>
+  <p class="quote" style="font-size:.82em!important;margin-top:28px">Linguagens são caixas de ferramentas; paradigmas são formas de escolher a ferramenta certa.</p>
+  <p class="source">Van Roy, “Programming Paradigms for Dummies”; documentação oficial do PHP para classes/objetos e recursos de PHP 8.4.</p>
+</section>
+
+<section data-auto-animate>
+  <h2>Uma linha do tempo: da máquina ao objeto</h2>
+  <div class="timeline">
+    <div class="time-item"><b>1940–50</b><span>Programas próximos da máquina; saltos e endereços explícitos.</span></div>
+    <div class="time-item"><b>1950–60</b><span>Procedimentos, sub-rotinas e linguagens de alto nível.</span></div>
+    <div class="time-item"><b>1960–70</b><span>Programação estruturada; crítica ao uso indiscriminado de GOTO.</span></div>
+    <div class="time-item"><b>1967–80</b><span>Simula e Smalltalk consolidam classes, objetos e mensagens.</span></div>
+    <div class="time-item"><b>1980–hoje</b><span>C++, Java, C#, PHP e frameworks popularizam OOP no desenvolvimento comercial.</span></div>
+  </div>
+  <p class="source">Dijkstra (1968); Böhm & Jacopini (1966); ACM Turing Award Dahl/Nygaard; Kay, “The Early History of Smalltalk”.</p>
+</section>
+
+<section>
+  <h2>Programação não estruturada</h2>
+  <div class="two-pane">
+    <div>
+      <p>Nos primeiros estilos imperativos, o controle podia saltar livremente entre trechos do programa. A metáfora é um mapa de cidade sem placas: dá para chegar, mas é difícil explicar o caminho.</p>
+      <div class="compare">
+        <div class="card bad"><h3>Força</h3><p>Próxima da máquina; flexível; útil em baixo nível.</p></div>
+        <div class="card bad"><h3>Problema</h3><p>Fluxo difícil de seguir; manutenção e prova de correção ficam frágeis.</p></div>
+      </div>
+    </div>
+    <div class="stage small-code">
+      <pre><code class="language-php">$i = 0;
+inicio:
+if ($i >= count($pedidos)) goto fim;
+processar($pedidos[$i]);
+$i++;
+goto inicio;
+fim:
+echo "Concluído";</code></pre>
+      <p class="tiny">O problema não é um salto isolado. É a perda de estrutura quando saltos viram a arquitetura do raciocínio.</p>
+    </div>
+  </div>
+  <p class="source">Dijkstra, “Go To Statement Considered Harmful”, Communications of the ACM, 1968.</p>
+</section>
+
+<section>
+  <h2>Transferências incondicionais de controle</h2>
+  <p class="sub">Um salto incondicional transfere a execução para outro ponto sem depender de uma estrutura de controle de alto nível.</p>
+  <div class="stage">
+    <div class="diagram-row fragment"><div class="node">Linha 10</div><div class="arrow">↓</div><div class="node">Linha 11</div><div class="arrow">↓</div><div class="node">Linha 12</div></div>
+    <div class="diagram-row fragment"><div class="node pulse">GOTO 80</div><div class="arrow">⤴</div><div class="node">Linha 80</div></div>
+    <div class="diagram-row fragment"><div class="node">Manutenção</div><div class="arrow">?</div><div class="node">“De onde veio?”</div><div class="arrow">?</div><div class="node">“Para onde vai?”</div></div>
+  </div>
+  <p class="quote" style="font-size:.76em!important;margin-top:20px">Quanto mais caminhos invisíveis, maior o custo cognitivo do programa.</p>
+  <p class="source">Dijkstra argumenta que o uso irrestrito de GOTO prejudica a capacidade de compreender o progresso do processo computacional.</p>
+</section>
+
+<section>
+  <h2>Programação estruturada: a virada do controle</h2>
+  <div class="grid cols-3">
+    <div class="card blue"><div class="big-number">1</div><h3>Sequência</h3><p>Faça A, depois B, depois C.</p></div>
+    <div class="card mint"><div class="big-number">2</div><h3>Seleção</h3><p>Se uma condição vale, siga um caminho; caso contrário, siga outro.</p></div>
+    <div class="card lav"><div class="big-number">3</div><h3>Repetição</h3><p>Repita enquanto uma condição continuar válida.</p></div>
+  </div>
+  <p class="quote" style="font-size:.82em!important;margin-top:34px">Estruturar é trocar “pule para qualquer lugar” por “leia como uma narrativa”.</p>
+  <p class="source">Böhm & Jacopini (1966) mostraram a expressividade de sequência, seleção e repetição; Dijkstra (1968) popularizou a crítica ao GOTO.</p>
+</section>
+
+<section>
+  <h2>Animação: sequência, seleção e repetição</h2>
+  <div class="stage">
+    <div class="flow">
+      <div class="box fragment highlight-current-blue">1. Receber pedido</div>
+      <div class="arrow fragment">→</div>
+      <div class="box fragment highlight-current-blue">2. Validar estoque</div>
+      <div class="arrow fragment">→</div>
+      <div class="box fragment highlight-current-blue">3. Separar itens</div>
+    </div>
+    <div class="flow fragment">
+      <div class="box">Se pago</div><div class="arrow">→</div><div class="box">Enviar</div><div class="arrow">/</div><div class="box">Senão: aguardar</div>
+    </div>
+    <div class="flow fragment">
+      <div class="box">Enquanto houver itens</div><div class="arrow">↻</div><div class="box pulse">Processar próximo item</div>
+    </div>
+  </div>
+  <p class="source">Controle estruturado como base de legibilidade, teste e decomposição de programas.</p>
+</section>
+
+<section>
+  <h2>Funções e procedimentos</h2>
+  <div class="grid cols-2">
+    <div class="card blue"><h3>Procedimento</h3><p>Bloco nomeado que executa uma ação. Pode alterar estado, imprimir, salvar ou enviar.</p><pre><code class="language-php">function enviarEmail($pedido): void {
+    // ação com efeito colateral
+}</code></pre></div>
+    <div class="card mint"><h3>Função</h3><p>Idealmente recebe entradas e produz uma saída. Em matemática, função enfatiza transformação.</p><pre><code class="language-php">function total(array $itens): float {
+    return array_sum($itens);
+}</code></pre></div>
+  </div>
+  <p class="quote" style="font-size:.78em!important;margin-top:20px">Nomear uma operação é o primeiro passo para transformar código em vocabulário.</p>
+  <p class="source">Van Roy & Haridi (2004); fundamentos de decomposição e abstração procedural.</p>
+</section>
+
+<section>
+  <h2>Decomposição funcional</h2>
+  <p class="sub">Quebrar um problema grande em operações menores, nomeadas e testáveis.</p>
+  <div class="stage">
+    <div class="node" style="margin:auto;min-width:360px">Fechar pedido</div>
+    <div class="diagram-row">
+      <div class="node fragment">validarCarrinho()</div>
+      <div class="node fragment">calcularFrete()</div>
+      <div class="node fragment">aplicarCupom()</div>
+      <div class="node fragment">registrarPagamento()</div>
+    </div>
+    <p class="tiny center fragment">Cada função reduz a carga mental: o leitor não precisa entender tudo de uma vez.</p>
+  </div>
+  <p class="source">A decomposição funcional é central na tradição estruturada/procedural e segue relevante em linguagens multiparadigma.</p>
+</section>
+
+<section>
+  <h2>Programação procedural</h2>
+  <div class="two-pane">
+    <div>
+      <p>Organiza o sistema como <strong>procedimentos que operam sobre dados</strong>. É muito útil para scripts, rotinas lineares, ETL simples, automações e programas com fluxo bem definido.</p>
+      <p class="quote" style="font-size:.78em!important">Pergunta típica: “Quais passos devo executar?”</p>
+    </div>
+    <div class="stage small-code">
+      <pre><code class="language-php">$pedido = carregarPedido($id);
+validarPedido($pedido);
+$total = calcularTotal($pedido);
+confirmarPagamento($pedido, $total);
+notificarCliente($pedido);</code></pre>
+      <p class="tiny">Dados circulam entre procedimentos. A ordem de execução é parte central do projeto.</p>
+    </div>
+  </div>
+  <p class="source">Paradigma imperativo/procedural: programas como comandos e procedimentos sobre estado.</p>
+</section>
+
+<section>
+  <h2>Programação funcional</h2>
+  <div class="two-pane">
+    <div>
+      <p>Enfatiza <strong>funções, composição, imutabilidade e transformação de valores</strong>. Sua base teórica se relaciona ao cálculo lambda, desenvolvido por Alonzo Church.</p>
+      <p>Boa metáfora: uma linha de produção onde cada estação transforma a peça sem mexer nas estações anteriores.</p>
+    </div>
+    <div class="stage small-code">
+      <pre><code class="language-php">$nomes = array_map(
+    fn($aluno) => mb_strtoupper($aluno['nome']),
+    $alunos
+);
+
+$aprovados = array_filter(
+    $alunos,
+    fn($aluno) => $aluno['media'] >= 6
+);</code></pre>
+    </div>
+  </div>
+  <p class="source">Rosser, “Highlights of the History of the Lambda-Calculus”; Van Roy & Haridi (2004).</p>
+</section>
+
+<section>
+  <h2>Animação: composição funcional</h2>
+  <div class="stage">
+    <div class="flow">
+      <div class="box fragment">Pedidos</div><div class="arrow fragment">→</div>
+      <div class="box fragment">filtrar pagos</div><div class="arrow fragment">→</div>
+      <div class="box fragment">mapear totais</div><div class="arrow fragment">→</div>
+      <div class="box fragment">somar</div><div class="arrow fragment">→</div>
+      <div class="box fragment pulse">Faturamento</div>
+    </div>
+    <p class="quote fragment" style="font-size:.8em!important;margin-top:44px">Menos “mude esta variável”; mais “transforme este conjunto”.</p>
+  </div>
+  <p class="source">Funções de ordem superior e composição são recursos comuns em linguagens funcionais e multiparadigma.</p>
+</section>
+
+<section>
+  <h2>Programação declarativa</h2>
+  <div class="grid cols-2">
+    <div class="card blue"><h3>Imperativo</h3><p>Descrevo o passo a passo para obter o resultado.</p><pre><code class="language-php">$nomes = [];
+foreach ($alunos as $a) {
+  if ($a['media'] >= 6) $nomes[] = $a['nome'];
+}</code></pre></div>
+    <div class="card mint"><h3>Declarativo</h3><p>Descrevo a condição ou o resultado desejado; o motor decide a estratégia.</p><pre><code class="language-sql">SELECT nome
+FROM alunos
+WHERE media >= 6;</code></pre></div>
+  </div>
+  <p class="quote" style="font-size:.78em!important;margin-top:16px">Declarar é dizer “o que”; programar imperativamente é dizer “como”.</p>
+  <p class="source">Paradigmas declarativos aparecem em SQL, linguagens lógicas, regras, queries e configurações.</p>
+</section>
+
+<section>
+  <h2>Programação lógica</h2>
+  <div class="two-pane">
+    <div>
+      <p>Na programação lógica, o programa é um conjunto de <strong>fatos e regras</strong>. A computação começa com uma consulta.</p>
+      <p>Em vez de “execute estes passos”, escrevemos relações: quem é pré-requisito de quem, quais regras permitem uma conclusão.</p>
+    </div>
+    <div class="stage small-code">
+      <pre><code class="language-prolog">prerequisito(logica, poo).
+prerequisito(poo, padroes).
+
+pode_cursar(Aluno, Disciplina) :-
+    aprovado(Aluno, Pre),
+    prerequisito(Pre, Disciplina).</code></pre>
+      <p class="tiny">O motor lógico tenta satisfazer a consulta com base nas relações conhecidas.</p>
+    </div>
+  </div>
+  <p class="source">Kowalski, “The Early Years of Logic Programming”; ALP Alain Colmerauer Prize: Prolog foi desenvolvido em Marseille em 1972.</p>
+</section>
+
+<section>
+  <h2>Programação orientada a eventos</h2>
+  <div class="two-pane">
+    <div>
+      <p>O fluxo não é comandado apenas por uma sequência principal. O sistema reage a <strong>eventos</strong>: clique, mensagem, requisição, timer, fila, web hook.</p>
+      <p class="quote" style="font-size:.78em!important">Pergunta típica: “Quando X acontecer, quem deve reagir?”</p>
+    </div>
+    <div class="stage">
+      <div class="diagram-row"><div class="node fragment">Clique</div><div class="arrow fragment">→</div><div class="node fragment">Listener</div><div class="arrow fragment">→</div><div class="node fragment">Callback</div></div>
+      <div class="diagram-row"><div class="node fragment">Mensagem Kafka</div><div class="arrow fragment">→</div><div class="node fragment">Consumer</div><div class="arrow fragment">→</div><div class="node fragment">Handler</div></div>
+    </div>
+  </div>
+  <p class="source">MDN: eventos são ocorrências sobre as quais o sistema informa o código para que ele possa reagir; Node.js: event loop permite I/O não bloqueante.</p>
+</section>
+
+<section>
+  <h2>Animação: event loop como portaria</h2>
+  <div class="stage">
+    <div class="grid cols-3" style="align-items:center">
+      <div class="card blue center"><h3>Call Stack</h3><p class="tiny">Código em execução agora</p><div class="node fragment pulse">handle()</div></div>
+      <div class="center"><div class="loop"></div><p class="mini"><strong>Event Loop</strong></p></div>
+      <div class="card mint center"><h3>Queue</h3><p class="tiny">Eventos aguardando vez</p><div class="node fragment">click</div><div class="node fragment">timer</div><div class="node fragment">I/O</div></div>
+    </div>
+    <p class="quote fragment" style="font-size:.75em!important;margin-top:12px">O loop não “faz tudo ao mesmo tempo”: ele coordena quando cada reação pode entrar em cena.</p>
+  </div>
+  <p class="source">MDN JavaScript execution model; Node.js official guide sobre event loop, timers e I/O não bloqueante.</p>
+</section>
+
+<section>
+  <h2>Programação orientada a objetos</h2>
+  <div class="two-pane">
+    <div>
+      <p>A POO organiza programas como uma rede de <strong>objetos com estado, comportamento e responsabilidades</strong>.</p>
+      <p>O foco muda de “quais passos executar?” para “quais entidades colaboram para resolver o problema?”</p>
+      <p class="quote" style="font-size:.78em!important">Objeto bom não é saco de dados: é uma unidade de decisão responsável.</p>
+    </div>
+    <div class="stage">
+      <div class="diagram-row"><div class="node fragment">Pedido</div><div class="arrow fragment">mensagem</div><div class="node fragment">Pagamento</div></div>
+      <div class="diagram-row"><div class="node fragment">Carrinho</div><div class="arrow fragment">calcula</div><div class="node fragment">Total</div></div>
+      <div class="diagram-row"><div class="node fragment">Cliente</div><div class="arrow fragment">recebe</div><div class="node fragment">Notificação</div></div>
+    </div>
+  </div>
+  <p class="source">Dahl & Nygaard receberam o ACM Turing Award por ideias fundamentais à emergência da POO por meio das linguagens Simula I e Simula 67.</p>
+</section>
+
+<section>
+  <h2>Simula: objetos para simular o mundo</h2>
+  <div class="two-pane">
+    <div>
+      <p>Simula nasceu no Norwegian Computing Center, associada a Ole-Johan Dahl e Kristen Nygaard, e introduziu ideias fundamentais de classes e objetos.</p>
+      <p>A motivação era modelar sistemas complexos e dinâmicos: filas, processos, entidades, eventos de simulação.</p>
+    </div>
+    <div class="stage">
+      <div class="flow"><div class="box fragment">Cliente chega</div><div class="arrow fragment">→</div><div class="box fragment">Fila</div><div class="arrow fragment">→</div><div class="box fragment">Atendente</div><div class="arrow fragment">→</div><div class="box fragment">Saída</div></div>
+      <p class="quote fragment" style="font-size:.75em!important;margin-top:44px">A palavra “objeto” ganha força quando o software tenta representar sistemas do mundo.</p>
+    </div>
+  </div>
+  <p class="source">ACM A.M. Turing Award 2001: Ole-Johan Dahl e Kristen Nygaard; IEEE Milestone: Object-Oriented Programming, 1961–1967.</p>
+</section>
+
+<section>
+  <h2>Smalltalk: objetos conversando por mensagens</h2>
+  <div class="two-pane">
+    <div>
+      <p>Smalltalk, desenvolvido no ambiente do Xerox PARC, consolidou uma visão mais radical: tudo é objeto e a computação é troca de mensagens.</p>
+      <p>Alan Kay reforçou que a ideia central não era apenas “classe”, mas <strong>mensagens entre componentes autônomos</strong>.</p>
+    </div>
+    <div class="stage">
+      <div class="diagram-row"><div class="node fragment pulse">Botão</div><div class="arrow fragment">click</div><div class="node fragment">Janela</div><div class="arrow fragment">open</div><div class="node fragment">Documento</div></div>
+      <p class="quote fragment" style="font-size:.75em!important;margin-top:40px">POO nasceu também como visão de interface, interação e sistemas vivos.</p>
+    </div>
+  </div>
+  <p class="source">Alan Kay, “The Early History of Smalltalk”; ACM Turing Award 2003 de Alan Kay por ideias fundamentais na computação pessoal e OOP.</p>
+</section>
+
+<section>
+  <h2>Evolução: C++, Java, C# e PHP</h2>
+  <div class="timeline">
+    <div class="time-item"><b>1979–85</b><span>C++ surge de “C with Classes”, integrando eficiência de C e abstrações inspiradas em Simula.</span></div>
+    <div class="time-item"><b>1995</b><span>Java populariza OOP com portabilidade, VM, bibliotecas e forte presença em sistemas corporativos.</span></div>
+    <div class="time-item"><b>2000</b><span>C# nasce com .NET, linguagem moderna, tipada e orientada a componentes.</span></div>
+    <div class="time-item"><b>1994–2004</b><span>PHP nasce como CGI/script web; PHP 5 fortalece o modelo de objetos.</span></div>
+    <div class="time-item"><b>2024+</b><span>PHP 8.4 traz property hooks, visibilidade assimétrica e melhorias que afetam design de objetos.</span></div>
+  </div>
+  <p class="source">Stroustrup/história de C++; Java/Sun; Microsoft C#; PHP.net History; PHP 8.4 Release Announcement.</p>
+</section>
+
+<section>
+  <h2>PHP 8.4 e a maturidade da POO no ecossistema web</h2>
+  <div class="grid cols-2">
+    <div class="card blue"><h3>De script para arquitetura</h3><p>PHP começou como ferramenta pragmática para páginas web, mas hoje sustenta frameworks, APIs, filas, testes, injeção de dependência e arquiteturas complexas.</p></div>
+    <div class="card mint"><h3>Recursos modernos</h3><p>Classes, interfaces, traits, enums, attributes, promoted properties, readonly, property hooks e visibilidade refinada dão mais expressividade ao design.</p></div>
+  </div>
+  <pre><code class="language-php">class Produto
+{
+    public function __construct(
+        public private(set) string $nome,
+        public private(set) float $preco
+    ) {}
+}</code></pre>
+  <p class="source">PHP.net Manual: Classes and Objects; PHP 8.4 Release Announcement: property hooks, asymmetric visibility e outras melhorias.</p>
+</section>
+
+<section>
+  <h2>Ações e procedimentos versus objetos e responsabilidades</h2>
+  <div class="grid cols-2">
+    <div class="card sand"><h3>Procedural</h3><p class="mini">O comportamento fica espalhado em funções que recebem dados.</p><pre><code class="language-php">$total = calcularTotal($pedido);
+if (podePagar($pedido)) {
+  pagarPedido($pedido);
+}</code></pre></div>
+    <div class="card blue"><h3>Orientado a objetos</h3><p class="mini">O comportamento pertence ao objeto responsável.</p><pre><code class="language-php">$pedido->calcularTotal();
+$pedido->pagarCom($pagamento);</code></pre></div>
+  </div>
+  <p class="quote" style="font-size:.78em!important;margin-top:18px">POO pergunta: “quem deveria saber fazer isso?”</p>
+  <p class="source">Design orientado a objetos: responsabilidades, encapsulamento e colaboração entre objetos.</p>
+</section>
+
+<section>
+  <h2>O mesmo problema em quatro lentes</h2>
+  <p class="sub">Problema: calcular o total de pedidos pagos.</p>
+  <div class="grid cols-4">
+    <div class="card blue"><h3>Procedural</h3><p>Iterar lista, somar valores, controlar variáveis.</p></div>
+    <div class="card mint"><h3>Funcional</h3><p>Filtrar pagos, mapear totais, reduzir para soma.</p></div>
+    <div class="card lav"><h3>Declarativo</h3><p>Consultar onde status = pago e agregar total.</p></div>
+    <div class="card sand"><h3>POO</h3><p>Pedido, ColeçãoDePedidos e Relatório colaboram.</p></div>
+  </div>
+  <p class="quote" style="font-size:.78em!important;margin-top:34px">O algoritmo pode ser parecido; o desenho das responsabilidades muda completamente.</p>
+  <p class="source">Comparação didática entre estilos com base em paradigmas amplamente aceitos.</p>
+</section>
+
+<section>
+  <h2>Exemplo animado em PHP: procedural → funcional → objetos</h2>
+  <div class="stage small-code">
+    <div class="fragment current-visible"><pre><code class="language-php">$total = 0;
+foreach ($pedidos as $pedido) {
+    if ($pedido['status'] === 'pago') {
+        $total += $pedido['valor'];
+    }
+}</code></pre><p class="mini">Procedural: fluxo explícito e variável acumuladora.</p></div>
+    <div class="fragment current-visible"><pre><code class="language-php">$total = array_sum(array_map(
+    fn($p) => $p['valor'],
+    array_filter($pedidos, fn($p) => $p['status'] === 'pago')
+));</code></pre><p class="mini">Funcional: composição de transformações.</p></div>
+    <div class="fragment current-visible"><pre><code class="language-php">$total = $relatorioDePedidos
+    ->somentePagos()
+    ->totalizar();</code></pre><p class="mini">OO: vocabulário do domínio e responsabilidades encapsuladas.</p></div>
+  </div>
+  <p class="source">Exemplo autoral para fins didáticos em PHP.</p>
+</section>
+
+<section>
+  <h2>Limites e contextos de uso</h2>
+  <div class="matrix">
+    <div class="mcell head">Paradigma</div><div class="mcell head">Brilha quando...</div><div class="mcell head">Cuidado quando...</div><div class="mcell head">Exemplo</div><div class="mcell head">Critério</div>
+    <div class="mcell label">Procedural</div><div class="mcell">Fluxo é simples e linear</div><div class="mcell">Regras crescem e espalham estado</div><div class="mcell">Script de importação</div><div class="mcell">Clareza do passo a passo</div>
+    <div class="mcell label">Funcional</div><div class="mcell">Transformações de dados são centrais</div><div class="mcell">Estado e efeitos dominam</div><div class="mcell">Pipeline de dados</div><div class="mcell">Composição e teste</div>
+    <div class="mcell label">Declarativo</div><div class="mcell">Resultado é mais importante que algoritmo</div><div class="mcell">É preciso controle fino do processo</div><div class="mcell">SQL, regras</div><div class="mcell">Expressividade</div>
+    <div class="mcell label">Eventos</div><div class="mcell">Sistema reage a estímulos externos</div><div class="mcell">Fluxo fica invisível e difícil de rastrear</div><div class="mcell">UI, filas, integrações</div><div class="mcell">Desacoplamento</div>
+    <div class="mcell label">POO</div><div class="mcell">Domínio tem entidades, regras e colaboração</div><div class="mcell">Objetos viram só getters/setters</div><div class="mcell">E-commerce, ERP, API</div><div class="mcell">Responsabilidades</div>
+  </div>
+  <p class="source">Síntese didática baseada em princípios de paradigmas e design de software.</p>
+</section>
+
+<section>
+  <h2>Armadilhas comuns na transição para POO</h2>
+  <div class="grid cols-3">
+    <div class="card sand"><h3>Classe ≠ objeto</h3><p>Classe é modelo; objeto é instância viva durante a execução.</p></div>
+    <div class="card sand"><h3>Getters não são design</h3><p>Encapsulamento não é só esconder atributo; é proteger invariantes.</p></div>
+    <div class="card sand"><h3>Herança não é obrigação</h3><p>Composição muitas vezes modela melhor colaboração e mudança.</p></div>
+  </div>
+  <p class="quote" style="font-size:.82em!important;margin-top:34px">O erro mais comum é escrever procedural usando classes como pastas.</p>
+  <p class="source">Boas práticas clássicas de design orientado a objetos: encapsulamento, composição e responsabilidade única.</p>
+</section>
+
+<section>
+  <h2>Miniatividade: identifique a lente</h2>
+  <div class="quiz">
+    <p class="sub">Clique no tipo de raciocínio que melhor descreve a frase.</p>
+    <div class="card blue"><p><strong>“Quando o pagamento for confirmado, publique um evento para liberar a separação do pedido.”</strong></p></div>
+    <button onclick="showAnswer('a1')">Procedural</button>
+    <button onclick="showAnswer('a1')">Funcional</button>
+    <button onclick="showAnswer('a1')">Declarativo</button>
+    <button onclick="showAnswer('a1')">Eventos</button>
+    <button onclick="showAnswer('a1')">POO</button>
+    <div id="a1" class="answer"><strong>Resposta esperada:</strong> orientação a eventos, possivelmente combinada com POO. O foco da frase está na reação a um acontecimento do sistema.</div>
+  </div>
+  <p class="source">Atividade de checagem conceitual para sala.</p>
+</section>
+
+<section>
+  <h2>Atividade em grupo: traduza o mesmo problema</h2>
+  <div class="grid cols-2">
+    <div class="card blue"><h3>Desafio</h3><p>Um aluno pode se matricular em POO se tiver sido aprovado em Lógica de Programação e não estiver com pendências acadêmicas.</p></div>
+    <div class="card mint"><h3>Entrega rápida</h3><p>Escreva a solução como: algoritmo procedural, consulta declarativa, regra lógica e colaboração entre objetos.</p></div>
+  </div>
+  <p class="quote" style="font-size:.82em!important;margin-top:32px">O objetivo não é escolher “o vencedor”. É perceber o que cada paradigma evidencia e o que ele esconde.</p>
+  <p class="source">Atividade autoral de comparação de paradigmas.</p>
+</section>
+
+<section>
+  <h2>Síntese visual</h2>
+  <div class="stack">
+    <div class="layer l1 fragment blur">Não estruturado: saltos e controle livre</div>
+    <div class="layer l2 fragment blur">Estruturado: sequência, seleção e repetição</div>
+    <div class="layer l3 fragment blur">Procedural: procedimentos sobre dados</div>
+    <div class="layer l4 fragment blur">Funcional / declarativo / lógico: transformações, resultados e regras</div>
+    <div class="layer l5 fragment blur">POO / eventos: responsabilidades, mensagens e reações</div>
+  </div>
+  <p class="source">Síntese didática da evolução histórica e conceitual dos paradigmas.</p>
+</section>
+
+<section>
+  <h2>Frases para levar</h2>
+  <div class="grid cols-2">
+    <div class="card blue"><p class="quote" style="font-size:.7em!important">Paradigma é uma lente: amplia algumas ideias e esconde outras.</p></div>
+    <div class="card mint"><p class="quote" style="font-size:.7em!important">Código legível nasce quando controle e responsabilidade ficam explícitos.</p></div>
+    <div class="card lav"><p class="quote" style="font-size:.7em!important">POO não começa em classe; começa em colaboração.</p></div>
+    <div class="card sand"><p class="quote" style="font-size:.7em!important">A pergunta certa não é “qual paradigma é melhor?”, mas “qual problema ele organiza melhor?”</p></div>
+  </div>
+  <p class="source">Fechamento conceitual da Unidade 1.</p>
+</section>
+
+<section>
+  <h2>Preparação para a próxima unidade</h2>
+  <div class="two-pane">
+    <div>
+      <p class="philosophy">Agora que sabemos comparar paradigmas, podemos estudar POO com mais rigor.</p>
+      <p>Próximo passo: objetos, classes, atributos, métodos, encapsulamento e a diferença entre modelar dados e modelar responsabilidades.</p>
+    </div>
+    <div class="stage">
+      <div class="flow"><div class="box fragment">Classe</div><div class="arrow fragment">→</div><div class="box fragment">Objeto</div><div class="arrow fragment">→</div><div class="box fragment">Mensagem</div><div class="arrow fragment">→</div><div class="box fragment">Responsabilidade</div></div>
+    </div>
+  </div>
+  <p class="source">Continuidade da disciplina de Programação Orientada a Objetos com PHP 8.4.</p>
+</section>
+
+<section>
+  <h2>Referências principais I</h2>
+  <div class="card blue">
+    <p class="mini"><strong>Van Roy, P.; Haridi, S.</strong> Concepts, Techniques, and Models of Computer Programming. MIT Press, 2004. Obra de referência para compreensão de paradigmas por modelos computacionais.</p>
+    <p class="mini"><strong>Dijkstra, E. W.</strong> “Go To Statement Considered Harmful”. Communications of the ACM, 1968.</p>
+    <p class="mini"><strong>Böhm, C.; Jacopini, G.</strong> “Flow diagrams, Turing machines and languages with only two formation rules”. Communications of the ACM, 1966.</p>
+    <p class="mini"><strong>Rosser, J. B.</strong> “Highlights of the History of the Lambda-Calculus”. 1984.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Referências principais II</h2>
+  <div class="card blue">
+    <p class="mini"><strong>ACM A.M. Turing Award.</strong> Ole-Johan Dahl e Kristen Nygaard, 2001: ideias fundamentais para a emergência da programação orientada a objetos por meio de Simula.</p>
+    <p class="mini"><strong>Kay, A.</strong> “The Early History of Smalltalk”. Relato histórico sobre Smalltalk, mensagens e visão de objetos.</p>
+    <p class="mini"><strong>Kowalski, R. A.</strong> “The Early Years of Logic Programming”. História da programação lógica e Prolog.</p>
+    <p class="mini"><strong>Association for Logic Programming.</strong> Alain Colmerauer Prize: Prolog desenvolvido em Marseille em 1972.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Referências principais III</h2>
+  <div class="card blue">
+    <p class="mini"><strong>PHP.net.</strong> PHP Manual: Classes and Objects; History of PHP; PHP 8.4 Release Announcement.</p>
+    <p class="mini"><strong>MDN Web Docs.</strong> JavaScript execution model; Introduction to events; Asynchronous JavaScript.</p>
+    <p class="mini"><strong>Node.js Documentation.</strong> Event loop, timers and nextTick: base para entender event loop e I/O não bloqueante.</p>
+    <p class="mini"><strong>Stroustrup, B.</strong> Trabalhos e relatos históricos sobre C++ e “C with Classes”.</p>
+  </div>
+</section>
+
+<section data-background-gradient="linear-gradient(135deg,#1f3552,#365f91)">
+  <h1 style="color:#fff">Fim da Unidade 1</h1>
+  <p class="quote" style="color:#e8f2f8!important">A forma como você organiza o pensamento define a forma como o software evolui.</p>
+  <p class="source" style="color:#bfd2e8!important">Próxima aula: fundamentos da Programação Orientada a Objetos em PHP 8.4.</p>
+</section>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    controls: true,
+    progress: true,
+    center: false,
+    transition: 'slide',
+    backgroundTransition: 'fade',
+    width: 1280,
+    height: 720,
+    margin: 0.04,
+    plugins: [RevealHighlight, RevealNotes]
+  });
+  function showAnswer(id){
+    document.getElementById(id).classList.add('show');
+  }
+</script>
+</body>
+</html>

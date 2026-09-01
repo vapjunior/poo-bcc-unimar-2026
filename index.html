@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Programação Orientada a Objetos em PHP</title>
+  <meta name="description" content="Menu das unidades de Programação Orientada a Objetos em PHP.">
+  <style>
+    :root{
+      --ink:#22313d;
+      --muted:#5f6f7c;
+      --line:#d9e4ec;
+      --bg:#f6f9fb;
+      --blue:#356985;
+      --blue-soft:#e5f1f7;
+      --mint:#dceee8;
+      --lav:#e9e7f5;
+      --shadow:0 20px 50px rgba(34,49,61,.08);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Arial,sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at 12% 14%, rgba(229,241,247,.85), transparent 26%),
+        radial-gradient(circle at 90% 18%, rgba(220,238,232,.72), transparent 22%),
+        linear-gradient(135deg,#fff 0%,var(--bg) 58%,#edf5f8 100%);
+    }
+    .page{
+      width:min(1120px,calc(100% - 40px));
+      margin:0 auto;
+      padding:56px 0 42px;
+    }
+    header{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:24px;
+      align-items:end;
+      padding-bottom:28px;
+      border-bottom:1px solid var(--line);
+    }
+    .kicker{
+      display:inline-flex;
+      align-items:center;
+      min-height:30px;
+      padding:6px 10px;
+      border-radius:999px;
+      background:var(--blue-soft);
+      color:var(--blue);
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+    h1{
+      margin:18px 0 12px;
+      max-width:840px;
+      font-size:clamp(36px,6vw,68px);
+      line-height:1;
+      letter-spacing:0;
+    }
+    .lead{
+      margin:0;
+      max-width:760px;
+      color:var(--muted);
+      font-size:20px;
+      line-height:1.45;
+    }
+    .status{
+      min-width:190px;
+      padding:18px;
+      border:1px solid var(--line);
+      border-radius:8px;
+      background:rgba(255,255,255,.72);
+      box-shadow:var(--shadow);
+    }
+    .status strong{display:block;font-size:30px;line-height:1;color:var(--blue)}
+    .status span{display:block;margin-top:8px;color:var(--muted);font-size:14px}
+    main{padding-top:34px}
+    .unit-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:18px;
+    }
+    .unit-card{
+      display:flex;
+      min-height:270px;
+      flex-direction:column;
+      justify-content:space-between;
+      padding:24px;
+      border-radius:8px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.86);
+      color:inherit;
+      text-decoration:none;
+      box-shadow:var(--shadow);
+      transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+    .unit-card:hover{
+      transform:translateY(-3px);
+      border-color:#a8c7d9;
+      box-shadow:0 24px 60px rgba(34,49,61,.12);
+    }
+    .unit-number{
+      width:56px;
+      height:56px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:50%;
+      font-size:24px;
+      font-weight:850;
+      color:var(--blue);
+      background:var(--blue-soft);
+    }
+    .unit-card:nth-child(2) .unit-number{background:var(--mint)}
+    .unit-card:nth-child(3) .unit-number{background:var(--lav)}
+    h2{
+      margin:26px 0 10px;
+      font-size:25px;
+      line-height:1.12;
+      letter-spacing:0;
+    }
+    .unit-card p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.5;
+      font-size:16px;
+    }
+    .open{
+      display:inline-flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-top:26px;
+      padding-top:18px;
+      border-top:1px solid var(--line);
+      color:var(--blue);
+      font-weight:800;
+    }
+    .note{
+      margin-top:30px;
+      padding:18px 20px;
+      border-left:5px solid #7aa6c2;
+      border-radius:8px;
+      background:rgba(255,255,255,.72);
+      color:var(--muted);
+      line-height:1.5;
+    }
+    footer{
+      margin-top:42px;
+      color:#7b8790;
+      font-size:14px;
+    }
+    @media (max-width:860px){
+      header{grid-template-columns:1fr;align-items:start}
+      .status{width:100%}
+      .unit-grid{grid-template-columns:1fr}
+      .unit-card{min-height:220px}
+      .page{width:min(100% - 28px,1120px);padding-top:34px}
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div>
+        <span class="kicker">Curso em desenvolvimento</span>
+        <h1>Programação Orientada a Objetos em PHP</h1>
+        <p class="lead">Menu inicial para acessar as unidades do material. Ao terminar ou trocar de assunto, use o botão Menu dentro dos slides para voltar para esta página.</p>
+      </div>
+      <aside class="status" aria-label="Resumo do curso">
+        <strong>3</strong>
+        <span>unidades publicadas nesta versão</span>
+      </aside>
+    </header>
+
+    <main>
+      <nav class="unit-grid" aria-label="Unidades do curso">
+        <a class="unit-card" href="unidade_1_paradigmas_poo_reveal(1).html">
+          <div>
+            <span class="unit-number">1</span>
+            <h2>Paradigmas e fundamentos históricos</h2>
+            <p>Como diferentes formas de pensar organizam dados, operações, controle e responsabilidades.</p>
+          </div>
+          <span class="open">Abrir unidade <span aria-hidden="true">→</span></span>
+        </a>
+
+        <a class="unit-card" href="poo_unidade2_php84_tipos_reveal.html">
+          <div>
+            <span class="unit-number">2</span>
+            <h2>Ambiente PHP 8.4 e sistema de tipos</h2>
+            <p>Do terminal ao primeiro mini-sistema tipado, com organização de projeto, Composer, PSR e contratos.</p>
+          </div>
+          <span class="open">Abrir unidade <span aria-hidden="true">→</span></span>
+        </a>
+
+        <a class="unit-card" href="unidade_3_modelo_objetos_classes_instancias_reveal_slides7_8_ajustados.html">
+          <div>
+            <span class="unit-number">3</span>
+            <h2>Modelo de objetos, classes e instâncias</h2>
+            <p>Conceitos centrais de objetos, classes, instâncias, estado, comportamento e identidade.</p>
+          </div>
+          <span class="open">Abrir unidade <span aria-hidden="true">→</span></span>
+        </a>
+      </nav>
+
+      <p class="note">Este site foi preparado para GitHub Pages como conteúdo estático. As apresentações continuam usando Reveal.js via CDN, então os slides carregam diretamente no navegador.</p>
+    </main>
+
+    <footer>
+      POO com PHP 8.4 - material didatico segmentado por unidades.
+    </footer>
+  </div>
+</body>
+</html>

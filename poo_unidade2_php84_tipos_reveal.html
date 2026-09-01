@@ -1,0 +1,1091 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>POO — Unidade 2: Ambiente PHP 8.4 e Sistema de Tipos</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/theme/white.css" id="theme">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/highlight/monokai.css">
+
+  <style>
+    :root{
+      --azul:#4F86A8;
+      --azul-escuro:#274C63;
+      --azul-claro:#CFE4EF;
+      --cinza:#6D7A86;
+      --cinza-claro:#EFF4F7;
+      --branco:#FFFFFF;
+      --areia:#F7F5F0;
+      --verde:#7BAE9A;
+      --amarelo:#EACD7A;
+      --vermelho:#D98282;
+      --sombra:0 20px 60px rgba(39,76,99,.12);
+      --radius:28px;
+    }
+
+    .reveal{font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color:var(--azul-escuro); background:linear-gradient(135deg,#FFFFFF 0%,#F7FBFD 42%,#EEF6FA 100%);}    
+    .reveal h1,.reveal h2,.reveal h3{letter-spacing:-.035em; color:var(--azul-escuro); font-weight:800; text-transform:none;}
+    .reveal h1{font-size:2.25em; line-height:.98;}
+    .reveal h2{font-size:1.5em; line-height:1.05; margin-bottom:.35em;}
+    .reveal h3{font-size:1.02em;}
+    .reveal p,.reveal li{font-size:.62em; line-height:1.35; color:#38566A;}
+    .reveal small{color:var(--cinza);}
+    .reveal strong{color:var(--azul-escuro);}
+    .reveal em{color:#547991; font-style:normal; font-weight:700;}
+    .reveal code{font-family:"JetBrains Mono", "Fira Code", Consolas, monospace; font-size:.86em; border-radius:12px;}
+    .reveal pre{width:100%; box-shadow:var(--sombra); border-radius:20px; overflow:hidden; margin:.5rem 0;}
+    .reveal pre code{max-height:520px; padding:1.15rem; line-height:1.22;}
+
+    .slide-shell{position:relative; min-height:650px; display:flex; flex-direction:column; justify-content:center;}
+    .topline{position:absolute; top:-10px; left:0; right:0; display:flex; justify-content:space-between; align-items:center; font-size:.28em; letter-spacing:.09em; text-transform:uppercase; color:#6d8799;}
+    .topline span:last-child{padding:.35rem .7rem; border-radius:999px; background:rgba(207,228,239,.65);}
+    .footer-note{position:absolute; bottom:-22px; left:0; right:0; display:flex; justify-content:space-between; align-items:center; font-size:.25em; color:#8a99a4;}
+    .cite{font-size:.25em; color:#7b8b96; margin-top:.7em;}
+
+    .grid-2{display:grid; grid-template-columns:1.05fr .95fr; gap:28px; align-items:center;}
+    .grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; align-items:stretch;}
+    .grid-4{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; align-items:stretch;}
+    .card{background:rgba(255,255,255,.78); border:1px solid rgba(79,134,168,.14); border-radius:var(--radius); padding:24px; box-shadow:var(--sombra);}
+    .card.soft{background:rgba(239,244,247,.72); box-shadow:none;}
+    .pill{display:inline-flex; align-items:center; gap:.45rem; padding:.35rem .75rem; background:rgba(207,228,239,.7); color:var(--azul-escuro); border-radius:999px; font-size:.34em; font-weight:800; letter-spacing:.02em;}
+    .tag{display:inline-block; padding:.2rem .48rem; border-radius:999px; background:#edf6fa; border:1px solid #c9e2ed; color:#41697e; font-size:.35em; font-weight:800;}
+    .big-number{font-size:3.0em; line-height:.85; color:rgba(79,134,168,.25); font-weight:900; letter-spacing:-.08em;}
+    .lead{font-size:.78em!important; color:#35566b!important; line-height:1.23!important;}
+    .muted{color:#71818c!important;}
+    .center{text-align:center;}
+    .left{text-align:left;}
+
+    .hero-bg{position:absolute; inset:-70px -90px; z-index:-1; background:
+      radial-gradient(circle at 18% 25%, rgba(207,228,239,.75), transparent 24%),
+      radial-gradient(circle at 86% 68%, rgba(234,205,122,.25), transparent 22%),
+      radial-gradient(circle at 74% 22%, rgba(123,174,154,.23), transparent 18%);
+      filter:saturate(1.1);
+    }
+    .terminal{background:#1F2A33; color:#EAF3F7; border-radius:24px; overflow:hidden; box-shadow:var(--sombra); text-align:left;}
+    .terminal .bar{height:34px; background:#2A3944; display:flex; align-items:center; gap:8px; padding-left:16px;}
+    .dot{width:10px; height:10px; border-radius:50%; background:#D98282; opacity:.9;}
+    .dot:nth-child(2){background:#EACD7A}.dot:nth-child(3){background:#7BAE9A}
+    .terminal pre{box-shadow:none; border-radius:0; margin:0; background:transparent;}
+    .terminal code{background:transparent!important; color:#EAF3F7!important;}
+    .cmd{color:#96cde6}.ok{color:#9ed6bd}.warn{color:#f1d78c}.bad{color:#efa4a4}.comment{color:#9fb2bd}.hl{background:rgba(234,205,122,.22); padding:0 .15em; border-radius:6px;}
+
+    .flow{display:flex; justify-content:center; align-items:center; gap:12px; margin-top:20px;}
+    .flow .node{padding:18px 20px; border-radius:22px; background:white; border:1px solid rgba(79,134,168,.2); min-width:130px; box-shadow:var(--sombra); font-size:.48em; font-weight:800;}
+    .flow .arrow{font-size:1em; color:#8eb0c3; font-weight:800;}
+    .analogy{font-size:1.02em!important; line-height:1.12!important; font-weight:800; letter-spacing:-.03em;}
+    .checklist li{list-style:none; margin:.4em 0;}
+    .checklist li::before{content:"✓"; color:var(--verde); font-weight:900; margin-right:.45em;}
+    .danger li::before{content:"!"; color:var(--vermelho);}
+
+    .type-table{font-size:.42em; width:100%; border-collapse:separate; border-spacing:0 8px;}
+    .type-table td,.type-table th{text-align:left; padding:10px 12px; background:rgba(255,255,255,.8); border-top:1px solid rgba(79,134,168,.12); border-bottom:1px solid rgba(79,134,168,.12);}
+    .type-table th{color:#42697e; background:#eaf4f8;}
+    .type-table tr td:first-child,.type-table tr th:first-child{border-radius:14px 0 0 14px; border-left:1px solid rgba(79,134,168,.12); font-weight:800; color:#274C63;}
+    .type-table tr td:last-child,.type-table tr th:last-child{border-radius:0 14px 14px 0; border-right:1px solid rgba(79,134,168,.12);}
+
+    .mini-title{font-size:.52em!important; text-transform:uppercase; letter-spacing:.08em; color:#6d8799!important; font-weight:800;}
+    .quote{font-size:1.05em!important; line-height:1.15!important; color:#2d5268!important; font-weight:850; letter-spacing:-.035em;}
+    .caption{font-size:.36em!important; color:#6d7a86!important;}
+    .kbd{font-family:"JetBrains Mono", Consolas, monospace; padding:.15rem .45rem; background:#e8f2f6; border:1px solid #c7dfe9; border-radius:8px; font-size:.85em;}
+    .two-code{display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:start;}
+    .tiny-code pre code{font-size:.55em;}
+    .svg-illus{max-width:100%; height:auto; filter:drop-shadow(0 20px 35px rgba(39,76,99,.12));}
+    .task{display:grid; grid-template-columns:70px 1fr; gap:16px; align-items:start; margin:.85rem 0;}
+    .task .num{font-size:.74em; line-height:1; font-weight:900; color:#7aa4bb;}
+    .task p{margin:0;}
+    .reference-list li{font-size:.42em; margin:.28rem 0;}
+    .reveal a{color:#3c7592;}
+
+    @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+    .floaty{animation:floaty 5s ease-in-out infinite;}
+    .home-link{
+      position:fixed;
+      top:16px;
+      left:16px;
+      z-index:40;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      min-height:40px;
+      padding:9px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.9);
+      border:1px solid rgba(79,134,168,.28);
+      color:var(--azul-escuro);
+      font:700 14px/1 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      text-decoration:none;
+      box-shadow:0 10px 26px rgba(39,76,99,.14);
+      backdrop-filter:blur(8px);
+    }
+    .home-link:hover{background:#fff;transform:translateY(-1px);}
+  </style>
+</head>
+<body>
+<a class="home-link" href="index.html" aria-label="Voltar ao menu inicial">← Menu</a>
+<div class="reveal">
+<div class="slides">
+
+<section>
+  <div class="slide-shell center">
+    <div class="hero-bg"></div>
+    <span class="pill">POO · Unidade 2 · PHP 8.4</span>
+    <h1>Ambiente PHP 8.4<br>e sistema de tipos</h1>
+    <p class="lead">Do terminal ao primeiro mini-sistema tipado: organização, execução web local, Composer, PSR e contratos de dados.</p>
+    <p class="caption">Foco da aula: começar a desenvolver com segurança — não instalar PHP.</p>
+  </div>
+</section>
+
+<section>
+  <div class="slide-shell">
+    <div class="topline"><span>Por que esta unidade existe?</span><span>setup → código real</span></div>
+    <div class="grid-2">
+      <div>
+        <h2>A máquina já roda PHP.<br>Agora precisamos de <em>ambiente de projeto</em>.</h2>
+        <p class="lead">Saber executar <code>php arquivo.php</code> é o primeiro passo. Desenvolver software exige mais: estrutura, entrada controlada, autoload, estilo, tipos e feedback rápido.</p>
+      </div>
+      <div class="terminal fragment fade-up">
+        <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<pre><code class="language-bash">$ php -v
+PHP 8.4.x
+
+$ php -S localhost:8000 -t public
+[OK] servidor de desenvolvimento ativo</code></pre>
+      </div>
+    </div>
+    <div class="footer-note"><span>Ideia-força</span><span>Ambiente bom reduz erro acidental.</span></div>
+  </div>
+</section>
+
+<section>
+  <div class="slide-shell">
+    <div class="topline"><span>Roteiro de aprendizagem</span><span>camadas</span></div>
+    <h2>Quatro camadas para começar bem</h2>
+    <div class="grid-4">
+      <div class="card fragment fade-up"><div class="big-number">1</div><h3>Runtime</h3><p>Entender CLI, servidor embutido, <code>php.ini</code> e extensões.</p></div>
+      <div class="card fragment fade-up"><div class="big-number">2</div><h3>Projeto</h3><p>Organizar pastas, ponto de entrada e execução local.</p></div>
+      <div class="card fragment fade-up"><div class="big-number">3</div><h3>Ecossistema</h3><p>Composer, autoload PSR-4 e padrão PSR-12.</p></div>
+      <div class="card fragment fade-up"><div class="big-number">4</div><h3>Tipos</h3><p>Contratos explícitos para funções, propriedades e objetos.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="slide-shell center">
+    <span class="pill">Analogia</span>
+    <p class="quote">Rodar PHP é ligar o carro.<br>Desenvolver software é dirigir com painel, mapa, regras de trânsito e manutenção.</p>
+    <div class="flow fragment fade-up">
+      <div class="node">Terminal</div><div class="arrow">→</div><div class="node">Projeto</div><div class="arrow">→</div><div class="node">Tipos</div><div class="arrow">→</div><div class="node">Código confiável</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <section>
+    <div class="slide-shell center">
+      <div class="topline"><span>Parte 1</span><span>ambiente sem instalar</span></div>
+      <h1>Ambiente PHP<br>para desenvolvimento</h1>
+      <p class="lead">O objetivo é transformar “um arquivo solto” em “um projeto executável”.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>PHP como runtime</span><span>CLI e Web</span></div>
+      <div class="grid-2">
+        <div>
+          <h2>PHP não é só “arquivo dentro do servidor”.</h2>
+          <p class="lead">O mesmo runtime pode executar scripts no terminal, responder requisições HTTP em desenvolvimento e compor aplicações web completas.</p>
+          <p>Na prática didática, usaremos dois modos: <strong>CLI</strong> para experimentos rápidos e <strong>servidor embutido</strong> para páginas e requisições locais.</p>
+        </div>
+        <div class="card soft">
+          <p class="mini-title">modelo mental</p>
+          <div class="flow" style="flex-direction:column; gap:8px;">
+            <div class="node fragment">Código <code>.php</code></div>
+            <div class="arrow fragment">↓</div>
+            <div class="node fragment">Runtime PHP 8.4</div>
+            <div class="arrow fragment">↓</div>
+            <div class="node fragment">Saída: terminal ou HTTP</div>
+          </div>
+        </div>
+      </div>
+      <p class="cite">Base: Manual do PHP — CLI, servidor embutido e documentação oficial.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>Checklist rápido</span><span>diagnóstico</span></div>
+      <h2>Antes de codar: três comandos que evitam “funciona na minha máquina”</h2>
+      <div class="terminal">
+        <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<pre><code class="language-bash">php -v       # versão do runtime
+php --ini    # qual php.ini está sendo lido
+php -m       # extensões carregadas</code></pre>
+      </div>
+      <div class="grid-3" style="margin-top:18px;">
+        <div class="card fragment"><h3><code>php -v</code></h3><p>Confirma se todos estão na mesma família de versão.</p></div>
+        <div class="card fragment"><h3><code>php --ini</code></h3><p>Mostra onde as configurações do PHP estão sendo lidas.</p></div>
+        <div class="card fragment"><h3><code>php -m</code></h3><p>Lista recursos disponíveis: <code>pdo</code>, <code>mbstring</code>, <code>curl</code> etc.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>php.ini</span><span>configuração</span></div>
+      <div class="grid-2">
+        <div>
+          <h2><code>php.ini</code> é o painel de controle do runtime.</h2>
+          <p>Ele define limites, extensões, exibição de erros e comportamento do ambiente. No CLI, o arquivo é lido a cada invocação; em módulos de servidor, normalmente é lido quando o servidor inicia.</p>
+          <p class="caption">Não vamos “tuná-lo” agora; vamos saber localizar e interpretar.</p>
+        </div>
+        <div class="card">
+          <p class="mini-title">o que observar em aula</p>
+          <ul class="checklist">
+            <li><code>display_errors</code> em desenvolvimento</li>
+            <li><code>error_reporting</code> mais rigoroso</li>
+            <li><code>extension=...</code> para recursos externos</li>
+            <li><code>date.timezone</code> quando necessário</li>
+          </ul>
+        </div>
+      </div>
+      <p class="cite">Base: Manual do PHP — arquivo de configuração.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>Servidor embutido</span><span>desenvolvimento</span></div>
+      <h2>Servidor embutido: ótimo para aula, ruim para produção</h2>
+      <div class="grid-2">
+        <div class="terminal fragment fade-up">
+          <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<pre><code class="language-bash">mkdir catalogo-php
+cd catalogo-php
+mkdir public src
+
+php -S localhost:8000 -t public</code></pre>
+        </div>
+        <div>
+          <p class="lead">O servidor embutido foi projetado para apoiar desenvolvimento, testes e demonstrações em ambientes controlados.</p>
+          <ul>
+            <li class="fragment">Use em <strong>localhost</strong>.</li>
+            <li class="fragment">Não exponha em rede pública.</li>
+            <li class="fragment">Em produção, entram servidores reais: Nginx/Apache + PHP-FPM, containers etc.</li>
+          </ul>
+        </div>
+      </div>
+      <p class="cite">Base: Manual do PHP — Built-in web server.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>Primeira estrutura</span><span>mínimo profissional</span></div>
+      <h2>De arquivo solto para projeto</h2>
+      <div class="grid-2">
+        <div class="terminal">
+          <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<pre><code class="language-text">catalogo-php/
+├── public/
+│   └── index.php        # ponto de entrada HTTP
+├── src/
+│   └── Produto.php      # código da aplicação
+└── composer.json        # metadados + autoload</code></pre>
+        </div>
+        <div class="card soft fragment fade-left">
+          <p class="analogy">A pasta <code>public/</code> é a vitrine.<br><code>src/</code> é o estoque.</p>
+          <p>Usuário acessa a vitrine. A lógica interna fica protegida fora da raiz pública.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>Front controller</span><span>entrada única</span></div>
+      <h2><code>public/index.php</code>: a porta de entrada</h2>
+      <div class="two-code tiny-code">
+        <div>
+          <p class="mini-title">index mínimo</p>
+<pre><code class="language-php">&lt;?php
+
+declare(strict_types=1);
+
+require __DIR__ . '/../vendor/autoload.php';
+
+echo '&lt;h1&gt;Catálogo PHP&lt;/h1&gt;';
+echo '&lt;p&gt;Servidor local funcionando.&lt;/p&gt;';</code></pre>
+        </div>
+        <div class="fragment fade-left">
+          <p class="mini-title">por que isso importa?</p>
+          <ul>
+            <li>uma entrada para a aplicação;</li>
+            <li>autoload carregado uma vez;</li>
+            <li>caminho natural para rotas, controllers e MVC;</li>
+            <li>preparação para frameworks como Laravel.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>Entrada externa</span><span>desconfie</span></div>
+      <h2>Regra de ouro: dado externo chega como suspeito</h2>
+      <div class="grid-2">
+        <div>
+          <p class="lead">Formulário, URL, JSON, CSV e terminal não conhecem seu modelo de domínio.</p>
+          <p>Antes de usar, você precisa <strong>validar</strong>, <strong>converter</strong> e <strong>escapar saída</strong>.</p>
+        </div>
+        <div class="terminal fragment">
+          <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<pre><code class="language-php">$nome = $_GET['nome'] ?? 'aluno';
+
+// saída HTML segura
+echo htmlspecialchars($nome, ENT_QUOTES, 'UTF-8');</code></pre>
+        </div>
+      </div>
+      <p class="caption">Tipos ajudam, mas não substituem validação de entrada.</p>
+    </div>
+  </section>
+</section>
+
+<section>
+  <section>
+    <div class="slide-shell center">
+      <div class="topline"><span>Parte 2</span><span>ecossistema</span></div>
+      <h1>Composer,<br>autoload e padrões</h1>
+      <p class="lead">Menos <code>require</code> manual. Mais organização de código.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>Composer</span><span>dependências e autoload</span></div>
+      <div class="grid-2">
+        <div>
+          <h2>Composer é o “gerente de dependências” do PHP moderno.</h2>
+          <p>Ele registra bibliotecas, scripts e regras de autoload. Mesmo sem instalar pacotes externos, ele já resolve um problema central: <strong>como encontrar classes</strong>.</p>
+          <p class="caption">Sem Composer: vários <code>require_once</code>. Com Composer: um autoload central.</p>
+        </div>
+        <div class="terminal fragment">
+          <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<pre><code class="language-bash">composer init
+composer dump-autoload</code></pre>
+        </div>
+      </div>
+      <p class="cite">Base: Documentação Composer — schema <code>composer.json</code> e autoload.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>PSR-4</span><span>namespaces → pastas</span></div>
+      <h2>PSR-4: o endereço das classes</h2>
+      <div class="two-code tiny-code">
+        <div>
+          <p class="mini-title">composer.json</p>
+<pre><code class="language-json">{
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  }
+}</code></pre>
+        </div>
+        <div class="fragment">
+          <p class="mini-title">src/Produto.php</p>
+<pre><code class="language-php">&lt;?php
+
+declare(strict_types=1);
+
+namespace App;
+
+final class Produto
+{
+    // ...
+}</code></pre>
+        </div>
+      </div>
+      <div class="flow fragment fade-up">
+        <div class="node"><code>App\Produto</code></div><div class="arrow">→</div><div class="node"><code>src/Produto.php</code></div>
+      </div>
+      <p class="cite">Base: PHP-FIG PSR-4 e Composer.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>Autoload</span><span>sem mágica</span></div>
+      <h2>O autoload parece mágica, mas é contrato</h2>
+      <div class="grid-2">
+        <div class="card">
+          <p class="mini-title">quando o PHP encontra</p>
+          <p class="analogy"><code>new App\Produto()</code></p>
+          <p>ele pergunta ao autoloader: “onde mora essa classe?”.</p>
+        </div>
+        <div class="card fragment">
+          <p class="mini-title">o Composer responde</p>
+          <p class="analogy"><code>App\</code> mora em <code>src/</code></p>
+          <p>então carrega o arquivo correto no momento necessário.</p>
+        </div>
+      </div>
+      <p class="caption">A regra de ouro: namespace, nome da classe e caminho precisam conversar.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>PSR-12</span><span>legibilidade</span></div>
+      <h2>Estilo não é frescura: é reduzir custo de leitura</h2>
+      <div class="grid-2">
+        <div>
+          <p class="lead">PSR-12 estende e substitui a PSR-2 como guia de estilo para código PHP moderno.</p>
+          <ul>
+            <li class="fragment">padroniza abertura de arquivos, namespaces e imports;</li>
+            <li class="fragment">define organização de classes e métodos;</li>
+            <li class="fragment">facilita revisão, manutenção e trabalho em equipe.</li>
+          </ul>
+        </div>
+        <div class="terminal fragment">
+          <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<pre><code class="language-php">&lt;?php
+
+declare(strict_types=1);
+
+namespace App;
+
+final class Produto
+{
+    public function __construct(
+        private string $nome,
+    ) {}
+}</code></pre>
+        </div>
+      </div>
+      <p class="cite">Base: PHP-FIG PSR-12.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell center">
+      <span class="pill">Frase de impacto</span>
+      <p class="quote">Código é escrito uma vez e lido dezenas de vezes.<br>Ambiente e padrão existem para proteger a leitura.</p>
+    </div>
+  </section>
+</section>
+
+<section>
+  <section>
+    <div class="slide-shell center">
+      <div class="topline"><span>Parte 3</span><span>sistema de tipos</span></div>
+      <h1>Sistema de tipos<br>em PHP 8.4</h1>
+      <p class="lead">Tipos são contratos executáveis: eles documentam intenção e interrompem usos inválidos.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>História curta</span><span>PHP moderno</span></div>
+      <h2>PHP evoluiu de linguagem dinâmica para linguagem com tipagem gradual prática</h2>
+      <div class="grid-3">
+        <div class="card fragment"><h3>Dinâmico</h3><p>Variáveis recebem valores sem declarar tipo previamente.</p></div>
+        <div class="card fragment"><h3>Explícito</h3><p>Funções, retornos, propriedades e constantes de classe podem declarar tipos.</p></div>
+        <div class="card fragment"><h3>Progressivo</h3><p>Você pode aumentar rigor por arquivo com <code>strict_types</code> e por projeto com análise estática.</p></div>
+      </div>
+      <p class="cite">Base: Manual do PHP — declarações de tipo.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell center">
+      <span class="pill">Analogia</span>
+      <p class="quote">Tipo é a etiqueta da tomada.<br>Você até consegue forçar um adaptador, mas o risco aumenta.</p>
+      <div class="grid-3" style="margin-top:28px;">
+        <div class="card fragment"><h3><code>int</code></h3><p>número inteiro</p></div>
+        <div class="card fragment"><h3><code>string</code></h3><p>texto</p></div>
+        <div class="card fragment"><h3><code>Produto</code></h3><p>objeto com comportamento</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>Vocabulário</span><span>tipos nativos</span></div>
+      <h2>Tipos que usaremos desde já</h2>
+      <table class="type-table">
+        <tr><th>Tipo</th><th>Exemplo</th><th>Quando usar</th></tr>
+        <tr class="fragment"><td><code>int</code></td><td><code>21</code></td><td>contagens, IDs numéricos, quantidades inteiras</td></tr>
+        <tr class="fragment"><td><code>float</code></td><td><code>99.90</code></td><td>medidas e cálculos com decimais; cuidado com dinheiro</td></tr>
+        <tr class="fragment"><td><code>string</code></td><td><code>'Mouse'</code></td><td>texto, códigos, descrições</td></tr>
+        <tr class="fragment"><td><code>bool</code></td><td><code>true</code></td><td>decisões binárias</td></tr>
+        <tr class="fragment"><td><code>array</code></td><td><code>[1, 2, 3]</code></td><td>listas e mapas simples</td></tr>
+        <tr class="fragment"><td><code>object</code></td><td><code>new Produto()</code></td><td>estado + comportamento</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>Declarações</span><span>parâmetro e retorno</span></div>
+      <h2>Contrato de função: o que entra e o que sai</h2>
+      <div class="two-code tiny-code">
+        <div>
+          <p class="mini-title">sem contrato</p>
+<pre><code class="language-php">function aplicarDesconto($preco, $percentual) {
+    return $preco - ($preco * $percentual / 100);
+}</code></pre>
+        </div>
+        <div class="fragment">
+          <p class="mini-title">com contrato</p>
+<pre><code class="language-php">function aplicarDesconto(
+    float $preco,
+    float $percentual
+): float {
+    return $preco - ($preco * $percentual / 100);
+}</code></pre>
+        </div>
+      </div>
+      <p class="lead fragment">A segunda versão informa intenção para humanos, IDE, runtime e ferramentas de análise.</p>
+      <p class="cite">Base: Manual do PHP — Type declarations.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>strict_types</span><span>o detalhe que muda tudo</span></div>
+      <h2>PHP pode converter por você. Nem sempre isso é bom.</h2>
+      <div class="two-code tiny-code">
+        <div>
+          <p class="mini-title">modo coercitivo padrão</p>
+<pre><code class="language-php">function dobrar(int $n): int {
+    return $n * 2;
+}
+
+echo dobrar('10'); // pode converter</code></pre>
+        </div>
+        <div class="fragment">
+          <p class="mini-title">modo estrito no arquivo chamador</p>
+<pre><code class="language-php">&lt;?php
+
+declare(strict_types=1);
+
+echo dobrar('10'); // TypeError</code></pre>
+        </div>
+      </div>
+      <p class="caption fragment">Em aula: usar <code>declare(strict_types=1);</code> como padrão no topo dos arquivos PHP.</p>
+      <p class="cite">Base: Manual do PHP — Strict typing.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>Animação conceitual</span><span>erro cedo</span></div>
+      <h2>O bug pode aparecer em dois lugares</h2>
+      <div class="grid-2">
+        <div class="card fragment fade-up">
+          <h3>Sem contrato forte</h3>
+          <p>O erro pode viajar pelo sistema e explodir longe da causa.</p>
+          <div class="flow"><div class="node">Entrada errada</div><div class="arrow">→</div><div class="node bad">Falha tardia</div></div>
+        </div>
+        <div class="card fragment fade-up">
+          <h3>Com tipos + validação</h3>
+          <p>O erro é barrado perto da origem, com mensagem mais útil.</p>
+          <div class="flow"><div class="node">Entrada errada</div><div class="arrow">→</div><div class="node ok">Falha cedo</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>Propriedades tipadas</span><span>estado consistente</span></div>
+      <h2>Classe também declara contrato de estado</h2>
+      <div class="terminal">
+        <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<pre><code class="language-php">&lt;?php
+
+declare(strict_types=1);
+
+namespace App;
+
+final class Produto
+{
+    public function __construct(
+        public string $nome,
+        public float $preco,
+        public int $estoque,
+    ) {}
+}</code></pre>
+      </div>
+      <p class="lead fragment">Agora, <code>Produto</code> não é só um array: é uma estrutura com forma explícita.</p>
+      <p class="cite">Base: Manual do PHP — propriedades tipadas desde PHP 7.4 e declarações em propriedades.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>Nulos</span><span>ausência explícita</span></div>
+      <h2><code>?Tipo</code>: quando ausência faz parte do contrato</h2>
+      <div class="two-code tiny-code">
+        <div>
+          <p class="mini-title">sem nulo</p>
+<pre><code class="language-php">function nomeCurto(string $nome): string {
+    return substr($nome, 0, 20);
+}</code></pre>
+        </div>
+        <div class="fragment">
+          <p class="mini-title">com nulo explícito</p>
+<pre><code class="language-php">function cupomAtual(?string $codigo): string {
+    return $codigo ?? 'sem-cupom';
+}</code></pre>
+        </div>
+      </div>
+      <p class="lead fragment">Não use <code>null</code> como “não pensei nisso”. Use quando “sem valor” for uma possibilidade real do domínio.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>Union types</span><span>uma coisa OU outra</span></div>
+      <h2><code>A|B</code>: quando o domínio aceita alternativas</h2>
+      <div class="terminal">
+        <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<pre><code class="language-php">function formatarIdentificador(int|string $id): string
+{
+    return 'ID-' . $id;
+}</code></pre>
+      </div>
+      <div class="grid-2" style="margin-top:16px;">
+        <div class="card fragment"><h3>Bom uso</h3><p>Entrada realmente pode ser número ou texto.</p></div>
+        <div class="card fragment"><h3>Mau uso</h3><p>Usar união para esconder indecisão de modelagem.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>Intersection types</span><span>uma coisa E outra</span></div>
+      <h2><code>A&B</code>: o objeto precisa cumprir múltiplos contratos</h2>
+      <div class="terminal tiny-code">
+        <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<pre><code class="language-php">interface Exportavel { public function exportar(): string; }
+interface Auditavel { public function auditoria(): array; }
+
+function enviarRelatorio(Exportavel&Auditavel $relatorio): void
+{
+    // precisa exportar e também gerar dados de auditoria
+}</code></pre>
+      </div>
+      <p class="lead fragment">Interseção é útil quando a função depende de capacidades, não de uma classe específica.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>Tipos especiais</span><span>intenção</span></div>
+      <h2><code>mixed</code>, <code>void</code> e <code>never</code> dizem muito sobre intenção</h2>
+      <div class="grid-3">
+        <div class="card fragment"><h3><code>mixed</code></h3><p>“Pode ser qualquer coisa”. Use pouco; exige cuidado.</p></div>
+        <div class="card fragment"><h3><code>void</code></h3><p>“Executa uma ação e não retorna valor útil”.</p></div>
+        <div class="card fragment"><h3><code>never</code></h3><p>“Não retorna nunca”: lança exceção ou encerra execução.</p></div>
+      </div>
+      <div class="terminal fragment tiny-code" style="margin-top:16px;">
+        <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<pre><code class="language-php">function falhar(string $mensagem): never
+{
+    throw new RuntimeException($mensagem);
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>Arrays</span><span>ponto crítico</span></div>
+      <h2><code>array</code> é poderoso, mas pouco específico</h2>
+      <div class="grid-2">
+        <div class="terminal tiny-code">
+          <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<pre><code class="language-php">function total(array $produtos): float
+{
+    // array de quê?
+    // quais chaves existem?
+    // qual tipo de cada campo?
+}</code></pre>
+        </div>
+        <div>
+          <p class="lead">O tipo nativo <code>array</code> não informa a forma interna. Por isso, em projetos reais, combinamos:</p>
+          <ul>
+            <li class="fragment">objetos para dados importantes;</li>
+            <li class="fragment">PHPDoc para listas e shapes;</li>
+            <li class="fragment">PHPStan para checar contratos antes de executar.</li>
+          </ul>
+        </div>
+      </div>
+      <p class="cite">Base: PHPStan — PHPDoc types e array shapes.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>Enums</span><span>conjunto fechado</span></div>
+      <h2>Quando os valores possíveis são conhecidos, use enum</h2>
+      <div class="terminal tiny-code">
+        <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<pre><code class="language-php">enum StatusProduto: string
+{
+    case Ativo = 'ativo';
+    case Inativo = 'inativo';
+    case Esgotado = 'esgotado';
+}</code></pre>
+      </div>
+      <p class="lead fragment">Enum troca “strings mágicas” por opções explícitas do domínio.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>Erros</span><span>feedback do runtime</span></div>
+      <h2>Quando o contrato é quebrado, PHP deve reclamar</h2>
+      <div class="grid-2">
+        <div class="terminal tiny-code">
+          <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<pre><code class="language-php">function registrarEstoque(int $qtd): void {}
+
+registrarEstoque('dez');
+// TypeError em modo estrito</code></pre>
+        </div>
+        <div class="card fragment">
+          <p class="analogy">Erro cedo é professor.<br>Erro tarde é cliente reclamando.</p>
+          <p>Durante a disciplina, erro não é vergonha: é sinal de contrato violado.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>PHP 8.4</span><span>novidades úteis para POO</span></div>
+      <h2>PHP 8.4 reforça a modelagem de objetos</h2>
+      <div class="grid-2">
+        <div class="card fragment"><h3>Property hooks</h3><p>Permitem interceptar leitura/escrita de propriedades com lógica controlada.</p></div>
+        <div class="card fragment"><h3>Visibilidade assimétrica</h3><p>Permite leitura pública e escrita mais restrita, como <code>public private(set)</code>.</p></div>
+      </div>
+      <p class="lead fragment">Essas features aproximam propriedades de contratos de domínio, reduzindo parte da cerimônia de getters/setters.</p>
+      <p class="cite">Base: PHP 8.4 release announcement e Manual do PHP — property hooks.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>Property hooks</span><span>validação no estado</span></div>
+      <h2>Exemplo PHP 8.4: propriedade com validação</h2>
+      <div class="terminal tiny-code">
+        <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<pre><code class="language-php">final class Produto
+{
+    public string $nome {
+        set {
+            if (trim($value) === '') {
+                throw new InvalidArgumentException('Nome obrigatório');
+            }
+            $this-&gt;nome = $value;
+        }
+    }
+}</code></pre>
+      </div>
+      <p class="caption">Use como ferramenta de modelagem, não como desculpa para esconder regras confusas dentro de propriedades.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>Visibilidade assimétrica</span><span>leitura ≠ escrita</span></div>
+      <h2>Objeto legível por fora, protegido contra alteração indevida</h2>
+      <div class="terminal tiny-code">
+        <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<pre><code class="language-php">final class Produto
+{
+    public private(set) string $nome;
+
+    public function __construct(string $nome)
+    {
+        $this-&gt;nome = $nome;
+    }
+}</code></pre>
+      </div>
+      <p class="lead fragment">Quem usa o objeto consegue ler <code>$produto-&gt;nome</code>, mas não consegue reescrever livremente.</p>
+    </div>
+  </section>
+</section>
+
+<section>
+  <section>
+    <div class="slide-shell center">
+      <div class="topline"><span>Parte 4</span><span>mão no código</span></div>
+      <h1>Mini-sistema:<br>Catálogo tipado</h1>
+      <p class="lead">Um primeiro projeto pequeno para aplicar ambiente, autoload e tipos.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>Objetivo do laboratório</span><span>mínimo funcional</span></div>
+      <h2>Vamos construir um catálogo simples</h2>
+      <div class="grid-3">
+        <div class="card fragment"><h3>Produto</h3><p>nome, preço, estoque e status.</p></div>
+        <div class="card fragment"><h3>Lista</h3><p>array de objetos, não array solto de campos.</p></div>
+        <div class="card fragment"><h3>Visualização</h3><p>página local usando servidor embutido.</p></div>
+      </div>
+      <p class="lead fragment">Critério de sucesso: abrir <code>localhost:8000</code> e ver produtos renderizados a partir de classes tipadas.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>Passo 1</span><span>estrutura</span></div>
+      <h2>Criar projeto e autoload</h2>
+      <div class="terminal">
+        <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<pre><code class="language-bash">mkdir catalogo-php
+cd catalogo-php
+mkdir public src
+composer init
+composer dump-autoload
+php -S localhost:8000 -t public</code></pre>
+      </div>
+      <p class="caption">Depois do <code>composer.json</code>, adicionar PSR-4: <code>"App\\": "src/"</code>.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>Passo 2</span><span>enum</span></div>
+      <h2>Status explícito do produto</h2>
+      <div class="terminal tiny-code">
+        <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<pre><code class="language-php">&lt;?php
+
+declare(strict_types=1);
+
+namespace App;
+
+enum StatusProduto: string
+{
+    case Ativo = 'ativo';
+    case Inativo = 'inativo';
+    case Esgotado = 'esgotado';
+}</code></pre>
+      </div>
+      <p class="caption">Arquivo: <code>src/StatusProduto.php</code></p>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>Passo 3</span><span>classe tipada</span></div>
+      <h2>Produto como objeto, não como “array qualquer”</h2>
+      <div class="terminal tiny-code">
+        <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<pre><code class="language-php">&lt;?php
+
+declare(strict_types=1);
+
+namespace App;
+
+final class Produto
+{
+    public function __construct(
+        public string $nome,
+        public float $preco,
+        public int $estoque,
+        public StatusProduto $status = StatusProduto::Ativo,
+    ) {}
+
+    public function precoFormatado(): string
+    {
+        return 'R$ ' . number_format($this-&gt;preco, 2, ',', '.');
+    }
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>Passo 4</span><span>dados</span></div>
+      <h2>Lista de objetos</h2>
+      <div class="terminal tiny-code">
+        <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<pre><code class="language-php">use App\Produto;
+use App\StatusProduto;
+
+$produtos = [
+    new Produto('Mouse sem fio', 89.90, 12),
+    new Produto('Teclado mecânico', 249.90, 4),
+    new Produto('Monitor 24"', 899.00, 0, StatusProduto::Esgotado),
+];</code></pre>
+      </div>
+      <p class="lead fragment">Cada item da lista agora tem o mesmo contrato.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>Passo 5</span><span>renderização</span></div>
+      <h2><code>public/index.php</code> renderizando o catálogo</h2>
+      <div class="terminal tiny-code">
+        <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<pre><code class="language-php">&lt;?php
+
+declare(strict_types=1);
+
+require __DIR__ . '/../vendor/autoload.php';
+
+use App\Produto;
+use App\StatusProduto;
+
+$produtos = [
+    new Produto('Mouse sem fio', 89.90, 12),
+    new Produto('Teclado mecânico', 249.90, 4),
+    new Produto('Monitor 24"', 899.00, 0, StatusProduto::Esgotado),
+];
+
+foreach ($produtos as $produto) {
+    echo '&lt;p&gt;';
+    echo htmlspecialchars($produto-&gt;nome) . ' — ';
+    echo $produto-&gt;precoFormatado() . ' — ';
+    echo $produto-&gt;status-&gt;value;
+    echo '&lt;/p&gt;';
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>Atividade guiada</span><span>20–30 min</span></div>
+      <h2>Desafios incrementais</h2>
+      <div class="task fragment"><div class="num">01</div><p>Adicionar método <code>estaDisponivel(): bool</code> em <code>Produto</code>.</p></div>
+      <div class="task fragment"><div class="num">02</div><p>Exibir “disponível” ou “indisponível” com base no estoque e status.</p></div>
+      <div class="task fragment"><div class="num">03</div><p>Criar função <code>filtrarDisponiveis(array $produtos): array</code>.</p></div>
+      <div class="task fragment"><div class="num">04</div><p>Provocar um erro de tipo proposital e explicar a mensagem.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>Debug didático</span><span>aprendendo com erro</span></div>
+      <h2>Erro proposital: o contrato protege o sistema</h2>
+      <div class="terminal tiny-code">
+        <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<pre><code class="language-php">$produto = new Produto(
+    nome: 'Mouse sem fio',
+    preco: 'oitenta', // deveria ser float
+    estoque: 12,
+);</code></pre>
+      </div>
+      <p class="lead fragment">Pergunta para a turma: o erro está no construtor ou em quem chamou o construtor?</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>Qualidade</span><span>feedback antes de rodar</span></div>
+      <h2>Próximo passo: análise estática</h2>
+      <div class="grid-2">
+        <div>
+          <p class="lead">PHPStan encontra classes de bugs sem executar o sistema, especialmente quando o código usa tipos e PHPDoc de forma consistente.</p>
+          <p>Ele possui níveis de regra progressivos, permitindo aumentar o rigor conforme a base amadurece.</p>
+        </div>
+        <div class="terminal fragment">
+          <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<pre><code class="language-bash">composer require --dev phpstan/phpstan
+vendor/bin/phpstan analyse src public -l 5</code></pre>
+        </div>
+      </div>
+      <p class="cite">Base: PHPStan — getting started e rule levels.</p>
+    </div>
+  </section>
+</section>
+
+<section>
+  <section>
+    <div class="slide-shell center">
+      <div class="topline"><span>Fechamento</span><span>síntese</span></div>
+      <h1>Checklist mental<br>da Unidade 2</h1>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <h2>Antes de entregar qualquer exercício PHP</h2>
+      <div class="grid-2">
+        <ul class="checklist">
+          <li class="fragment">Projeto tem <code>public/</code> e <code>src/</code>.</li>
+          <li class="fragment"><code>composer.json</code> tem PSR-4.</li>
+          <li class="fragment"><code>vendor/autoload.php</code> é carregado no ponto de entrada.</li>
+          <li class="fragment">Arquivos começam com <code>declare(strict_types=1);</code>.</li>
+        </ul>
+        <ul class="checklist">
+          <li class="fragment">Funções têm tipos de parâmetro e retorno.</li>
+          <li class="fragment">Classes têm propriedades tipadas.</li>
+          <li class="fragment">Entrada externa é validada.</li>
+          <li class="fragment">Saída HTML é escapada.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell center">
+      <span class="pill">Resumo</span>
+      <p class="quote">Ambiente organiza o projeto.<br>Composer organiza as classes.<br>Tipos organizam as ideias.</p>
+      <p class="lead fragment">POO começa antes de herança e polimorfismo: começa quando dados e responsabilidades ganham forma.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="slide-shell">
+      <div class="topline"><span>Referências principais</span><span>fontes consultadas</span></div>
+      <h2>Referências para estudo</h2>
+      <ul class="reference-list">
+        <li>PHP.net — PHP 8.4 Release Announcement: novidades como property hooks, visibilidade assimétrica e melhorias gerais. <a href="https://www.php.net/releases/8.4/en.php">php.net/releases/8.4</a></li>
+        <li>PHP Manual — Type declarations: parâmetros, retornos, propriedades e constantes de classe. <a href="https://www.php.net/manual/en/language.types.declarations.php">php.net/manual/en/language.types.declarations.php</a></li>
+        <li>PHP Manual — Built-in web server: uso para desenvolvimento/teste, não produção. <a href="https://www.php.net/manual/en/features.commandline.webserver.php">php.net/manual/en/features.commandline.webserver.php</a></li>
+        <li>PHP Manual — Configuration file: funcionamento do <code>php.ini</code>. <a href="https://www.php.net/manual/en/configuration.file.php">php.net/manual/en/configuration.file.php</a></li>
+        <li>Composer — composer.json schema e autoload PSR-4. <a href="https://getcomposer.org/doc/04-schema.md">getcomposer.org/doc/04-schema.md</a></li>
+        <li>PHP-FIG — PSR-4 Autoloader e PSR-12 Extended Coding Style. <a href="https://www.php-fig.org/psr/psr-4/">php-fig.org/psr/psr-4</a> · <a href="https://www.php-fig.org/psr/psr-12/">php-fig.org/psr/psr-12</a></li>
+        <li>PHPStan — Getting Started, Rule Levels e PHPDoc Types. <a href="https://phpstan.org/user-guide/getting-started">phpstan.org/user-guide/getting-started</a></li>
+        <li>Jiang et al. — <em>Fuzzing the PHP Interpreter via Dataflow Fusion</em>, 2024. <a href="https://arxiv.org/abs/2410.21713">arXiv:2410.21713</a></li>
+        <li>Pramod et al. — <em>BUGSPHP: A dataset for Automated Program Repair in PHP</em>, 2024. <a href="https://arxiv.org/abs/2401.07356">arXiv:2401.07356</a></li>
+      </ul>
+    </div>
+  </section>
+</section>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/notes/notes.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/highlight/highlight.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/zoom/zoom.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    controls: true,
+    progress: true,
+    center: true,
+    transition: 'slide',
+    backgroundTransition: 'fade',
+    plugins: [ RevealHighlight, RevealNotes, RevealZoom ]
+  });
+</script>
+</body>
+</html>
