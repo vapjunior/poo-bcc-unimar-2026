@@ -1,7 +1,7 @@
 # Implementação — Unidade 4
 
 - Papel: Coder.
-- Estado: READY para QA; TASK-001 implementada, sem autoaprovação.
+- Estado: TASK-001 implementada e aprovada independentemente em `qa-report.md`; TASK-003 publicada.
 - Vínculos: REQ-001; AC-001, AC-002, AC-003 e AC-004.
 - Base: `fb8c318`, branch `main`.
 
@@ -29,4 +29,16 @@
 
 ## Handoff e pendências
 
-Próximo responsável: QA, TASK-002. Validar visualmente desktop/mobile e exercitar toolbar, navegação, demonstração e download. Coder executou verificações estruturais e HTTP; não executou testes de navegador nesta rodada. Servidor local disponível na porta 8764 durante o handoff. TASK-003 (commit/push) aguarda APPROVED independente; nenhum commit ou envio realizado.
+TASK-002 recebeu APPROVED independente em `qa-report.md`, cobrindo exatamente os hashes acima, incluindo navegador desktop/mobile. O principal liberou TASK-003. Nenhum código foi alterado após QA. Próximo destinatário: principal, para encerramento com evidências de publicação abaixo.
+
+
+## Publicação — TASK-003
+
+- `git fetch origin main`: primeira tentativa bloqueada pela sandbox em `.git/FETCH_HEAD`; repetida com permissão elevada, exit 0. `git rev-list --left-right --count HEAD...origin/main`: `0 0`, sem divergência antes do envio.
+- Hashes SHA-256 dos três arquivos conferidos novamente e idênticos aos aprovados por QA.
+- `git add` dos três arquivos e `docs/features/unidade-4`, seguido de `git commit -m "Adiciona unidade 4 sobre herança e contratos em PHP"`, com permissão elevada: exit 0. Commit da implementação: `85ad441eb2868211a77b6a1f8c81d7e516759409`.
+- `git push origin main`, sem force: exit 0; remoto avançou de `fb8c318` para `85ad441`. `git ls-remote origin refs/heads/main`: `85ad441eb2868211a77b6a1f8c81d7e516759409`, confirmando o envio.
+- GitHub Pages: consulta inicial do novo HTML retornou 404 durante propagação. Consulta posterior com `curl --fail --silent --show-error` teve exit 0, HTTP 200; `cmp` confirmou conteúdo idêntico ao arquivo local em `https://vapjunior.github.io/poo-bcc-unimar-2026/Heranca_Classes_Abstratas_Interfaces_PHP84_Reveal.html`.
+- Menu: a URL raiz apresentou cache da versão anterior na leitura inicial. Consulta `https://vapjunior.github.io/poo-bcc-unimar-2026/?v=85ad441` retornou HTTP 200 e conteúdo idêntico ao `index.html` validado, com as quatro unidades. O parâmetro identifica a versão e evita o cache antigo.
+- Evidências finais de publicação e encerramento dos documentos seguem em commit documental separado, sem alteração do código aprovado.
+- Servidor HTTP local da validação encerrado com Ctrl-C, exit 0, após o handoff e a confirmação pública.

@@ -22,8 +22,9 @@
 
 ## TASK-003 — Publicar no GitHub
 
-- Estado: READY. Pré-condição APPROVED de TASK-002 atendida; publicar exatamente a implementação validada pelo QA.
+- Estado: DONE. Implementação publicada após APPROVED de TASK-002.
 - Responsável: Coder, coordenado pelo principal.
 - Vínculos: REQ-002, AC-005.
 - Execução: conferir estado remoto, criar commit dos arquivos autorizados e artefatos, push normal para `origin/main`, confirmar hash remoto e disponibilidade do Pages se acessível.
 - Conclusão: hash, remoto, resultado do push e verificação de publicação registrados em `implementation.md`; limitações de Pages explícitas. Alteração posterior no código exige QA pertinente antes de publicar.
+- Evidências encaminhadas pelo principal: commit `85ad441eb2868211a77b6a1f8c81d7e516759409` confirmado em `origin/main` por `git ls-remote`; HTML da Unidade 4 servido pelo Pages com HTTP 200 e conteúdo idêntico por `cmp`; menu em `/?v=85ad441` servido com HTTP 200 e idêntico ao `index.html` com quatro unidades. A raiz apresentou cache no primeiro acesso; a consulta versionada confirmou o conteúdo novo. Pendente somente consolidar este registro no commit documental final.
