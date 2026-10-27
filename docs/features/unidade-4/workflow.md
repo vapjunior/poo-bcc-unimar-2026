@@ -11,3 +11,12 @@
 - Bloqueios recorrentes: nenhum.
 - Limitação: comportamento preexistente do sumário no modo de rolagem mobile documentado em qa-report.md; nenhum script alterado nesta integração.
 - Próxima ação: comunicar links publicados ao usuário após confirmação do envio documental.
+
+## Rodada 2 — Notas para alunos
+
+- Solicitação: revisar diretamente slides e notas, sem utilizar os agentes configurados, e republicar.
+- Responsável: agente principal, por instrução explícita do usuário que substitui o fluxo de delegação nesta rodada.
+- Fase: revisão concluída e validada; publicação pendente.
+- Evidências e escopo: [revisão de notas de estudo](notas-estudo.md); 81 notas reescritas, exemplos/analogias e explicações complementares; painel adaptado a desktop/mobile.
+- Validação atual: análise estrutural e Chrome em desktop/mobile, sem agentes ou QA independente; relatório anterior de QA preservado como histórico da integração inicial.
+- Próxima ação: commit, push e confirmação do GitHub Pages para a revisão.
