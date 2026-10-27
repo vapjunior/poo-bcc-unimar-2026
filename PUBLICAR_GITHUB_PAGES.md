@@ -8,6 +8,7 @@ Este repositório foi adaptado para funcionar como site estático no GitHub Page
 - `unidade_1_paradigmas_poo_reveal(1).html`: Unidade 1.
 - `poo_unidade2_php84_tipos_reveal.html`: Unidade 2.
 - `unidade_3_modelo_objetos_classes_instancias_reveal_slides7_8_ajustados.html`: Unidade 3.
+- `Heranca_Classes_Abstratas_Interfaces_PHP84_Reveal.html`: Unidade 4.
 - `.nojekyll`: instrui o GitHub Pages a publicar os arquivos exatamente como estão.
 
 ## Testar localmente
