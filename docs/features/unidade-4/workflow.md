@@ -16,7 +16,9 @@
 
 - Solicitação: revisar diretamente slides e notas, sem utilizar os agentes configurados, e republicar.
 - Responsável: agente principal, por instrução explícita do usuário que substitui o fluxo de delegação nesta rodada.
-- Fase: revisão concluída e validada; publicação pendente.
+- Fase: revisão concluída, validada e publicada.
 - Evidências e escopo: [revisão de notas de estudo](notas-estudo.md); 81 notas reescritas, exemplos/analogias e explicações complementares; painel adaptado a desktop/mobile.
 - Validação atual: análise estrutural e Chrome em desktop/mobile, sem agentes ou QA independente; relatório anterior de QA preservado como histórico da integração inicial.
-- Próxima ação: commit, push e confirmação do GitHub Pages para a revisão.
+- Publicação: commit `52af3bc48e53751144dc6457e46cf42aa6c0946e` confirmado em origin/main; execução Pages `40605113198` concluída com sucesso; HTML publicado idêntico byte a byte ao validado (`cmp` exit 0).
+- Pendências da revisão: nenhuma. Registros finais enviados em commit documental, sem alterar o HTML validado.
+- Próxima ação: comunicar o link da Unidade 4 e o botão “Notas de estudo”.

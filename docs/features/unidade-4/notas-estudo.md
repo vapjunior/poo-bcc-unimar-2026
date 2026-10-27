@@ -38,4 +38,7 @@ O recorte continua sendo PHP 8.4. Conferência das regras em documentação ofic
 
 ## Publicação
 
-Enviar a versão validada a `origin/main` e confirmar a apresentação no GitHub Pages. Evidência final de envio e disponibilidade registrada em `workflow.md` após a publicação.
+- Commit de conteúdo: `52af3bc48e53751144dc6457e46cf42aa6c0946e`, enviado e confirmado em `refs/heads/main` por `git ls-remote`.
+- [GitHub Pages — execução 40605113198](https://github.com/vapjunior/poo-bcc-unimar-2026/actions/runs/40605113198): `completed` / `success`.
+- HTML publicado obtido com `curl --fail --silent --show-error --max-time 25` e comparado com o arquivo validado por `cmp`: exit 0, idêntico byte a byte. Consulta com `?v=notas-52af3bc` para evitar a resposta anterior em cache durante a implantação.
+- Nenhuma alteração no HTML após os testes de navegador. Fechamento posterior exclusivamente documental.
